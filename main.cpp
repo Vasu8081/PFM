@@ -1,6 +1,6 @@
 #include <wx/wx.h>
 
-class PFM : public wxApp {
+class PFM final : public wxApp {
 public:
     bool OnInit() override;
 };

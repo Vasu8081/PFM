@@ -1,0 +1,14 @@
+#pragma once
+
+
+enum account_type {
+  ACCOUNT_TYPE_UNKNOWN = 0,
+  BANK_ACCOUNT = 1,
+  CREDIT_CARD_ACCOUNT = 2,
+  LOAN_ACCOUNT = 3,
+  BORROW_GIVEN_ACCOUNT = 4,
+  ASSET_ACCOUNT = 5,
+  CATEGORY_ACCOUNT = 6,
+  GOAL_ACCOUNT = 7,
+  CHIT_ACCOUNT = 8,
+};
