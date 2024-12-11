@@ -1,9 +1,32 @@
-#include <database/database_functions.h>
+#include <database/database.h>
 
-void create_tables(std::unique_ptr<pqxx::connection> conn)
+database::database(std::string db_name, std::string db_user, std::string db_password, std::string db_host, std::string db_port)
+    : _connection("dbname=" + db_name +
+                  " user=" + db_user +
+                  " password=" + db_password +
+                  " host=" + db_host +
+                  " port=" + db_port) {
+    try {
+        if (!_connection.is_open()) {
+            throw std::runtime_error("Failed to connect to the database: " + db_name);
+        }
+    } catch (const std::exception& e) {
+        throw std::runtime_error(std::string("Database connection error: ") + e.what());
+    }
+}
+
+pqxx::result database::execute_query(const std::string& query){
+    pqxx::work txn(_connection);
+    auto result = txn.exec(query);
+    txn.commit();
+    return result;
+}
+
+void database::create_tables()
 {
     try {
         std::vector<std::string> table_creation_queries = {
+            R"(CREATE EXTENSION IF NOT EXISTS "uuid-ossp";)",
             R"(
                 CREATE TABLE IF NOT EXISTS users (
                     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
@@ -116,7 +139,7 @@ void create_tables(std::unique_ptr<pqxx::connection> conn)
             )"
         };
 
-        pqxx::work txn(*conn);
+        pqxx::work txn(_connection);
         for (const auto& query : table_creation_queries) {
             txn.exec(query);
         }

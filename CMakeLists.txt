@@ -14,6 +14,7 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 find_package(PQXX REQUIRED)
 include_directories(${PQXX_INCLUDE_DIR} include)
 
+add_subdirectory(src)
 
 add_executable(${PROJECT_NAME} main.cpp)
-target_link_libraries(${PROJECT_NAME} ${wxWidgets_LIBRARIES} ${PQXX_LIBRARY})
+target_link_libraries(${PROJECT_NAME} database utils ${wxWidgets_LIBRARIES} ${PQXX_LIBRARY})

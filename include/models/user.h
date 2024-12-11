@@ -10,18 +10,21 @@ public:
         : _name(name), _email(email), _password(password), _mobile(mobile) {}
 
     // Getters
-    std::string get_name() const { return _name; }
-    std::string get_email() const { return _email; }
-    std::string get_password() const { return _password; }
-    std::optional<long> get_mobile() const { return _mobile; }
+    std::string id() const { return _name; }
+    std::string name() const { return _name; }
+    std::string email() const { return _email; }
+    std::string password() const { return _password; }
+    std::optional<long> mobile() const { return _mobile; }
 
     // Setters
-    void set_name(const std::string& name) { _name = name; }
-    void set_email(const std::string& email) { _email = email; }
-    void set_password(const std::string& password) { _password = password; }
-    void set_mobile(std::optional<long> mobile) { _mobile = mobile; }
+    void id(int id) { _id = id; }
+    void name(const std::string& name) { _name = name; }
+    void email(const std::string& email) { _email = email; }
+    void password(const std::string& password) { _password = password; }
+    void mobile(std::optional<long> mobile) { _mobile = mobile; }
 
 private:
+  	std::string _id;
     std::string _name;
     std::string _email;
     std::string _password;
