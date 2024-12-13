@@ -77,6 +77,14 @@ void category_account::set(const std::unordered_map<std::string, std::string>& f
     last_added_date(fields.at("last_added_date"));
 }
 
+void category_account::save() {
+    account::save();
+    auto fields = get();
+    db->insert(fields, table_name());
+    set(fields);
+}
+
+
 void category_account::print() const {
     std::stringstream text;
     text << "account_type: " << account_t(account_type()) << std::endl;

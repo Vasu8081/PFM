@@ -41,12 +41,10 @@ void transaction::moved_from_account(const std::string& moved_from_account) { _m
 void transaction::date(const std::string& date) { _date = date; }
 void transaction::proof_document(std::optional<std::string> proof_document) { _proof_document = proof_document; }
 
-// DB specific method to get the table name
 std::string transaction::table_name() const {
     return "transactions";
 }
 
-// Method to get all field data as a map
 std::unordered_map<std::string, std::string> transaction::get() const {
     std::unordered_map<std::string, std::string> fields;
     fields["id"] = id();
@@ -62,7 +60,6 @@ std::unordered_map<std::string, std::string> transaction::get() const {
     return fields;
 }
 
-// Method to set field values from a map
 void transaction::set(const std::unordered_map<std::string, std::string>& fields) {
     id(fields.at("id"));
     description(fields.at("description"));
@@ -76,7 +73,12 @@ void transaction::set(const std::unordered_map<std::string, std::string>& fields
     proof_document(fields.at("proof_document"));
 }
 
-// Method to print transaction details
+void transaction::save() {
+    auto fields = get();
+    db->insert(fields, table_name());
+    set(fields);
+}
+
 void transaction::print() const {
     std::stringstream text;
     text << "Transaction ID: " << id() << std::endl;

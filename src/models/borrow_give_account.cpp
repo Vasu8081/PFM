@@ -54,6 +54,13 @@ void borrow_give_account::set(const std::unordered_map<std::string, std::string>
     due_date(fields.at("due_date"));
 }
 
+void borrow_give_account::save() {
+    account::save();
+    auto fields = get();
+    db->insert(fields, table_name());
+    set(fields);
+}
+
 void borrow_give_account::print() const {
     std::stringstream text;
     text << "account_type: " << account_t(account_type()) << std::endl;

@@ -107,6 +107,13 @@ void credit_card_account::set(const std::unordered_map<std::string, std::string>
     billing_date(std::stoi(fields.at("billing_date")));
 }
 
+void credit_card_account::save() {
+    account::save();
+    auto fields = get();
+    db->insert(fields, table_name());
+    set(fields);
+}
+
 void credit_card_account::print() const {
     std::stringstream text;
     text << "account_type: " << account_t(account_type()) << std::endl;

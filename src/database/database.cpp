@@ -1,18 +1,20 @@
 #include <database/database.h>
 
-database::database(std::string db_name, std::string db_user, std::string db_password, std::string db_host, std::string db_port)
-    : _connection("dbname=" + db_name +
-                  " user=" + db_user +
-                  " password=" + db_password +
-                  " host=" + db_host +
-                  " port=" + db_port) {
+database::database()
+:     _connection("dbname=" + global_config.db_config.database_name +
+              " user=" + global_config.db_config.user_name +
+              " password=" + global_config.db_config.password +
+              " host=" + global_config.db_config.hostname +
+              " port=" + global_config.db_config.port)
+{
     try {
         if (!_connection.is_open()) {
-            throw std::runtime_error("Failed to connect to the database: " + db_name);
+            throw std::runtime_error("Failed to connect to the database: " + global_config.db_config.database_name);
         }
     } catch (const std::exception& e) {
         throw std::runtime_error(std::string("Database connection error: ") + e.what());
     }
+    create_tables();
 }
 
 pqxx::result database::execute_query(const std::string& query){
@@ -29,9 +31,7 @@ pqxx::result database::execute_query(const std::string& query){
   return {};
 }
 
-std::string database::insert(std::shared_ptr<entity> entity){
-    std::unordered_map<std::string, std::string> fields = entity->get();
-    std::string table = entity->table_name();
+void database::insert(std::unordered_map<std::string, std::string>& fields, std::string table){
     std::ostringstream columns, values;
     for (const auto& [key, value] : fields) {
         if (!value.empty()) {
@@ -46,12 +46,10 @@ std::string database::insert(std::shared_ptr<entity> entity){
     std::string query = "INSERT INTO " + table + " (" + columns.str() + ") VALUES (" + values.str() + ") RETURNING id";
     auto result = execute_query(query);
     std::string id = result[0][0].c_str();
-    return id;
+    fields["id"] = id;
 }
 
-void database::update(std::shared_ptr<entity> entity){
-    std::unordered_map<std::string, std::string> fields = entity->get();
-    std::string table = entity->table_name();
+void database::update(std::unordered_map<std::string, std::string>& fields, std::string table){
     std::string id = fields["id"];
     fields.erase("id");
     std::ostringstream updates;
@@ -65,32 +63,25 @@ void database::update(std::shared_ptr<entity> entity){
     execute_query(query);
 }
 
-void database::remove(std::shared_ptr<entity> entity){
-    std::unordered_map<std::string, std::string> fields = entity->get();
-    std::string table = entity->table_name();
+void database::remove(std::unordered_map<std::string, std::string>& fields, std::string table){
     std::string id = fields["id"];
     std::string query = "DELETE FROM " + table + " WHERE id = '" + id + "'";
     execute_query(query);
 }
 
-void database::fetch(std::shared_ptr<entity> entity){
-    std::unordered_map<std::string, std::string> fields = entity->get();
-    std::string table = entity->table_name();
+void database::fetch(std::unordered_map<std::string, std::string>& fields, std::string table){
     std::string id = fields["id"];
     std::string query = "SELECT * FROM " + table + " WHERE id = '" + id + "'";
     auto result = execute_query(query);
     std::unordered_map<std::string, std::string> record;
     auto row = result[0];
     for (const auto& field : row) {
-        record[field.name()] = field.as<std::string>();
+        fields[field.name()] = field.as<std::string>();
     }
-    entity->set(record);
 }
 
-std::vector<std::unordered_map<std::string, std::string>> database::select(std::shared_ptr<entity> entity)
+std::vector<std::unordered_map<std::string, std::string>> database::select(std::unordered_map<std::string, std::string>& filters, std::string table)
 {
-    std::unordered_map<std::string, std::string> filters = entity->get();
-    std::string table = entity->table_name();
     std::ostringstream where_clause;
     for (const auto& [key, value] : filters) {
         if (!value.empty()) {

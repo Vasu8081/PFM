@@ -75,6 +75,6 @@ void transaction_panel::save()
     _txn->moved_from_account(std::string(_moved_from_account_ctrl->GetValue().mb_str()));
     _txn->date(std::string(_date_ctrl->GetValue().mb_str()));
     _txn->proof_document(std::optional<std::string>(std::string(_proof_document_ctrl->GetValue().mb_str())));
-
     _txn->print();
+    _txn->save();
 }

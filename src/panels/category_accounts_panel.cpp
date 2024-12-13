@@ -48,4 +48,5 @@ void category_accounts_panel::save() {
     std::string last_added_date = std::string(_last_added_date_ctrl->GetValue().mb_str());
     _account->last_added_date(last_added_date.empty() ? std::nullopt : std::make_optional(last_added_date));
     _account->print();
+    _account->save();
 }

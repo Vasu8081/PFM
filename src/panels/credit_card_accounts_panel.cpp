@@ -69,4 +69,5 @@ void credit_card_accounts_panel::save() {
     _account->billing_date(std::stoi(std::string(_billing_date_ctrl->GetValue().mb_str())));
 
     _account->print();
+    _account->save();
 }

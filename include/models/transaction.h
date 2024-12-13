@@ -18,7 +18,7 @@ public:
                 std::optional<std::string> proof_document = std::nullopt);
 
     // Getters
-    std::string id() const;
+    std::string id() const override;
     std::string description() const;
     double amount() const;
     std::string transaction_type() const;
@@ -30,7 +30,7 @@ public:
     std::optional<std::string> proof_document() const;
 
     // Setters
-    void id(std::string id);
+    void id(std::string id) override;
     void description(const std::string& description);
     void amount(double amount);
     void transaction_type(const std::string& transaction_type);
@@ -45,6 +45,7 @@ public:
     std::string table_name() const override;
     std::unordered_map<std::string, std::string> get() const override;
     void set(const std::unordered_map<std::string, std::string>& fields) override;
+    void save() override;
     void print() const override;
 
 private:

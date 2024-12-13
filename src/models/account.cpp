@@ -7,9 +7,6 @@ account::account(std::string id) : _id(id), _account_type(enums::account_type::A
 account::account(std::string id, enums::account_type account_type)
     : _id(id), _account_type(account_type) {}
 
-account::account(std::string id, std::string user_id, enums::account_type account_type)
-    : _id(id), _user_id(user_id), _account_type(account_type) {}
-
 account::account(const std::unordered_map<std::string, std::string>& fields) {
     account::set(fields);
 }
@@ -54,6 +51,12 @@ void account::set(const std::unordered_map<std::string, std::string>& fields) {
     _id = fields.at("id");
     _user_id = fields.at("user_id");
     _account_type = account_t(fields.at("account_type"));
+}
+
+void account::save() {
+    auto fields = account::get();
+    db->insert(fields, account::table_name());
+    account::set(fields);
 }
 
 void account::print() const {

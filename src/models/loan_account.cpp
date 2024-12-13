@@ -99,6 +99,14 @@ void loan_account::set(const std::unordered_map<std::string, std::string>& field
     term_in_months(std::stoi(fields.at("term_in_months")));
 }
 
+void loan_account::save() {
+    account::save();
+    auto fields = get();
+    db->insert(fields, table_name());
+    set(fields);
+}
+
+
 void loan_account::print() const {
     std::stringstream text;
     text << "account_type: " << account_t(account_type()) << std::endl;

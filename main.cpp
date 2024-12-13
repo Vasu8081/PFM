@@ -1,8 +1,9 @@
 #include <wx/wx.h>
-#include <database/account_db.h>
-#include <database/user_db.h>
-#include <database/database.h>
 #include <dashboard/home.h>
+#include <config.h>
+#include <database/user_db.h>
+
+config global_config;
 
 class PFM final : public wxApp {
 public:
@@ -10,7 +11,14 @@ public:
 };
 
 bool PFM::OnInit() {
-    auto _db = new database("finance_app", "quickwitted", "", "localhost", "5432");
+    auto udb = new user_db();
+    auto usr = udb->get_all_users();
+    // if (usr.size() == 0) {
+    //     user u("vkandula", "vasudhanvarma@gmail.com", "vkandula", "6381851146");
+    //     udb->add_user(u);
+    // }
+    // usr = udb->get_all_users();
+    global_config.user_id = usr[0].id();
     auto dashboard = new home();
     dashboard->Show();
     return true;

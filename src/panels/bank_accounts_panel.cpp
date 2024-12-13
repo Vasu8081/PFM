@@ -48,4 +48,5 @@ void bank_accounts_panel::save() {
     std::string ifsc_code = std::string(_ifsc_code_ctrl->GetValue().mb_str());
     _account->ifsc_code(ifsc_code.empty() ? std::nullopt : std::make_optional(ifsc_code));
     _account->print();
+    _account->save();
 }

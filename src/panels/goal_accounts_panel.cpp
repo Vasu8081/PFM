@@ -60,6 +60,6 @@ void goal_accounts_panel::save() {
     _account->target_amount(std::stod(std::string(_target_amount_ctrl->GetValue().mb_str())));
     _account->target_date(std::string(_target_date_ctrl->GetValue().mb_str()));
     _account->last_added_date(std::string(_last_added_date_ctrl->GetValue().mb_str()));
-
     _account->print();
+    _account->save();
 }

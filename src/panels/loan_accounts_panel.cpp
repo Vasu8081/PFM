@@ -60,6 +60,6 @@ void loan_accounts_panel::save() {
     _account->interest_rate_per_annum(std::stod(std::string(_interest_rate_per_annum_ctrl->GetValue().mb_str())));
     _account->installment_start_date(std::string(_installment_start_date_ctrl->GetValue().mb_str()));
     _account->term_in_months(std::stoi(std::string(_term_in_months_ctrl->GetValue().mb_str())));
-
     _account->print();
+    _account->save();
 }

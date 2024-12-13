@@ -54,4 +54,5 @@ void asset_accounts_panel::save() {
     _account->current_market_value(std::stod(std::string(_current_market_value_ctrl->GetValue().mb_str())));
     _account->purchase_date(std::string(_purchase_date_ctrl->GetValue().mb_str()));
     _account->print();
+    _account->save();
 }

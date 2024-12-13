@@ -86,6 +86,13 @@ void asset_account::set(const std::unordered_map<std::string, std::string>& fiel
     purchase_date(fields.at("purchase_date"));
 }
 
+void asset_account::save() {
+    account::save();
+    auto fields = get();
+    db->insert(fields, table_name());
+    set(fields);
+}
+
 void asset_account::print() const {
     std::stringstream text;
     text << "account_type: " << account_t(account_type()) << std::endl;

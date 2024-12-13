@@ -99,6 +99,13 @@ void goal_account::set(const std::unordered_map<std::string, std::string>& field
     last_added_date(fields.at("last_added_date"));
 }
 
+void goal_account::save() {
+    account::save();
+    auto fields = get();
+    db->insert(fields, table_name());
+    set(fields);
+}
+
 void goal_account::print() const {
     std::stringstream text;
     text << "account_type: " << account_t(account_type()) << std::endl;

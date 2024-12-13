@@ -34,4 +34,5 @@ void borrow_give_accounts_panel::save() {
     std::string due_date = std::string(_due_date_ctrl->GetValue().mb_str());
     _account->due_date(due_date.empty() ? std::nullopt : std::make_optional(due_date));
     _account->print();
+    _account->save();
 }
