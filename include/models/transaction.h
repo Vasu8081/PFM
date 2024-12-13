@@ -1,56 +1,61 @@
 #pragma once
-#include <iostream>
-#include <optional>
 
-class transaction {
+#include <string>
+#include <unordered_map>
+#include <optional>
+#include <database/entity.h>
+#include <models/account.h>
+#include <models/category_account.h>
+
+class transaction : public virtual entity {
 public:
-    transaction(std::string from_account_id, std::string to_account_id,
-                double amount, std::string transaction_type,
-                std::string date,
-                std::optional<std::string> category_account_id = std::nullopt,
-                std::optional<std::string> moved_from_account = std::nullopt,
-                std::optional<std::string> description = std::nullopt,
-                std::optional<std::vector<uint8_t>> proof_document = std::nullopt)
-        : _from_account_id(from_account_id),
-          _to_account_id(to_account_id),
-          _amount(amount),
-          _transaction_type(transaction_type),
-          _date(date),
-          _category_account_id(category_account_id),
-          _moved_from_account(moved_from_account),
-          _description(description),
-          _proof_document(proof_document) {}
+    // Constructors
+    transaction();
+    transaction(std::string description, double amount,
+                std::string transaction_type, std::string from_account_id,
+                std::string to_account_id, std::string category_account_id,
+                std::string moved_from_account, std::string date,
+                std::optional<std::string> proof_document = std::nullopt);
 
     // Getters
-    std::string get_from_account_id() const { return _from_account_id; }
-    std::string get_to_account_id() const { return _to_account_id; }
-    double get_amount() const { return _amount; }
-    std::string get_transaction_type() const { return _transaction_type; }
-    std::string get_date() const { return _date; }
-    std::optional<std::string> get_category_account_id() const { return _category_account_id; }
-    std::optional<std::string> get_moved_from_account() const { return _moved_from_account; }
-    std::optional<std::string> get_description() const { return _description; }
-    std::optional<std::vector<uint8_t>> get_proof_document() const { return _proof_document; }
+    std::string id() const;
+    std::string description() const;
+    double amount() const;
+    std::string transaction_type() const;
+    std::string from_account_id() const;
+    std::string to_account_id() const;
+    std::string category_account_id() const;
+    std::string moved_from_account() const;
+    std::string date() const;
+    std::optional<std::string> proof_document() const;
 
     // Setters
-    void set_from_account_id(const std::string& from_account_id) { _from_account_id = from_account_id; }
-    void set_to_account_id(const std::string& to_account_id) { _to_account_id = to_account_id; }
-    void set_amount(double amount) { _amount = amount; }
-    void set_transaction_type(const std::string& transaction_type) { _transaction_type = transaction_type; }
-    void set_date(const std::string& date) { _date = date; }
-    void set_category_account_id(std::optional<std::string> category_account_id) { _category_account_id = category_account_id; }
-    void set_moved_from_account(std::optional<std::string> moved_from_account) { _moved_from_account = moved_from_account; }
-    void set_description(std::optional<std::string> description) { _description = description; }
-    void set_proof_document(std::optional<std::vector<uint8_t>> proof_document) { _proof_document = proof_document; }
+    void id(std::string id);
+    void description(const std::string& description);
+    void amount(double amount);
+    void transaction_type(const std::string& transaction_type);
+    void from_account_id(const std::string& from_account_id);
+    void to_account_id(const std::string& to_account_id);
+    void category_account_id(const std::string& category_account_id);
+    void moved_from_account(const std::string& moved_from_account);
+    void date(const std::string& date);
+    void proof_document(std::optional<std::string> proof_document);
+
+    // DB specific methods
+    std::string table_name() const override;
+    std::unordered_map<std::string, std::string> get() const override;
+    void set(const std::unordered_map<std::string, std::string>& fields) override;
+    void print() const override;
 
 private:
-    std::string _from_account_id;
-    std::string _to_account_id;
+    std::string _id;
+    std::string _description;
     double _amount;
     std::string _transaction_type;
+    std::string _from_account_id;
+    std::string _to_account_id;
+    std::string _category_account_id;
+    std::string _moved_from_account;
     std::string _date;
-    std::optional<std::string> _category_account_id;
-    std::optional<std::string> _moved_from_account;
-    std::optional<std::string> _description;
-    std::optional<std::vector<uint8_t>> _proof_document;
+    std::optional<std::string> _proof_document;
 };

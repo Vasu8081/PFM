@@ -1,0 +1,23 @@
+#pragma once
+
+#include <wx/wx.h>
+#include <wx/panel.h>
+#include <models/loan_account.h>
+
+class loan_accounts_panel : public wxPanel {
+public:
+    loan_accounts_panel(wxWindow *parent, std::shared_ptr<account> account);
+
+    void save();
+
+private:
+    std::shared_ptr<loan_account> _account;
+    wxSizer* _main_sizer;
+    wxTextCtrl* _loan_name_ctrl;
+    wxTextCtrl* _loan_account_number_ctrl;
+    wxTextCtrl* _principal_amount_ctrl;
+    wxTextCtrl* _remaining_principal_ctrl;
+    wxTextCtrl* _interest_rate_per_annum_ctrl;
+    wxTextCtrl* _installment_start_date_ctrl;
+    wxTextCtrl* _term_in_months_ctrl;
+};

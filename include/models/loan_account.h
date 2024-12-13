@@ -1,41 +1,47 @@
 #pragma once
-#include <iostream>
-#include <optional>
-#include <enums.h>
+
+#include <string>
+#include <unordered_map>
 #include <models/account.h>
 
-class loan_account : public account {
+class loan_account : public account, public virtual entity {
 public:
-    loan_account(std::string account_name, double principal_amount,
-                 double remaining_principal, double interest_rate,
-                 std::string installment_start_date, int term_in_months)
-        : account(account_name, account_type::LOAN_ACCOUNT),
-          _principal_amount(principal_amount),
-          _remaining_principal(remaining_principal),
-          _interest_rate(interest_rate),
-          _installment_start_date(installment_start_date),
-          _term_in_months(term_in_months) {}
+    loan_account();
+    loan_account(std::string loan_name, std::string loan_account_number,
+                 double principal_amount, double remaining_principal,
+                 double interest_rate_per_annum, std::string installment_start_date,
+                 int term_in_months);
 
     // Getters
-    double get_principal_amount() const { return _principal_amount; }
-    double get_remaining_principal() const { return _remaining_principal; }
-    double get_interest_rate() const { return _interest_rate; }
-    std::string get_installment_start_date() const { return _installment_start_date; }
-    int get_term_in_months() const { return _term_in_months; }
+    std::string loan_name() const;
+    std::string loan_account_number() const;
+    double principal_amount() const;
+    double remaining_principal() const;
+    double interest_rate_per_annum() const;
+    std::string installment_start_date() const;
+    int term_in_months() const;
 
     // Setters
-    void set_principal_amount(double principal_amount) { _principal_amount = principal_amount; }
-    void set_remaining_principal(double remaining_principal) { _remaining_principal = remaining_principal; }
-    void set_interest_rate(double interest_rate) { _interest_rate = interest_rate; }
-    void set_installment_start_date(const std::string& installment_start_date) {
-        _installment_start_date = installment_start_date;
-    }
-    void set_term_in_months(int term_in_months) { _term_in_months = term_in_months; }
+    void loan_name(const std::string& loan_name);
+    void loan_account_number(const std::string& loan_account_number);
+    void principal_amount(double principal_amount);
+    void remaining_principal(double remaining_principal);
+    void interest_rate_per_annum(double interest_rate_per_annum);
+    void installment_start_date(const std::string& installment_start_date);
+    void term_in_months(int term_in_months);
+
+    // DB specific methods
+    std::string table_name() const override;
+    std::unordered_map<std::string, std::string> get() const override;
+    void set(const std::unordered_map<std::string, std::string>& fields) override;
+    void print() const override;
 
 private:
+    std::string _loan_name;
+    std::string _loan_account_number;
     double _principal_amount;
     double _remaining_principal;
-    double _interest_rate;
+    double _interest_rate_per_annum;
     std::string _installment_start_date;
     int _term_in_months;
 };

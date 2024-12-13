@@ -1,33 +1,39 @@
 #pragma once
-#include <iostream>
+
+#include <string>
+#include <unordered_map>
 #include <optional>
-#include <enums.h>
 #include <models/account.h>
 
-class category_account : public account {
+class category_account : public account, public virtual entity {
 public:
-    category_account(std::string account_name, std::string parent_account_id,
-                     double monthly_budget, double current_balance = 0.0,
-                     std::optional<std::string> last_added_date = std::nullopt)
-        : account(account_name, account_type::CATEGORY_ACCOUNT),
-          _parent_account_id(parent_account_id),
-          _monthly_budget(monthly_budget),
-          _current_balance(current_balance),
-          _last_added_date(last_added_date) {}
+    category_account();
+    category_account(std::string category_name, std::string parent_account_id,
+                     double monthly_budget, double current_balance,
+                     std::optional<std::string> last_added_date = std::nullopt);
 
     // Getters
-    std::string get_parent_account_id() const { return _parent_account_id; }
-    double get_monthly_budget() const { return _monthly_budget; }
-    double get_current_balance() const { return _current_balance; }
-    std::optional<std::string> get_last_added_date() const { return _last_added_date; }
+    std::string category_name() const;
+    std::string parent_account_id() const;
+    double monthly_budget() const;
+    double current_balance() const;
+    std::optional<std::string> last_added_date() const;
 
     // Setters
-    void set_parent_account_id(const std::string& parent_account_id) { _parent_account_id = parent_account_id; }
-    void set_monthly_budget(double monthly_budget) { _monthly_budget = monthly_budget; }
-    void set_current_balance(double current_balance) { _current_balance = current_balance; }
-    void set_last_added_date(std::optional<std::string> last_added_date) { _last_added_date = last_added_date; }
+    void category_name(const std::string& category_name);
+    void parent_account_id(const std::string& parent_account_id);
+    void monthly_budget(double monthly_budget);
+    void current_balance(double current_balance);
+    void last_added_date(std::optional<std::string> last_added_date);
+
+    // DB specific methods
+    std::string table_name() const override;
+    std::unordered_map<std::string, std::string> get() const override;
+    void set(const std::unordered_map<std::string, std::string>& fields) override;
+    void print() const override;
 
 private:
+    std::string _category_name;
     std::string _parent_account_id;
     double _monthly_budget;
     double _current_balance;

@@ -1,4 +1,5 @@
+add_subdirectory(dashboard)
 add_subdirectory(database)
-add_subdirectory(dialogs)
+add_subdirectory(panels)
 add_subdirectory(models)
 add_subdirectory(utils)

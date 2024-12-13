@@ -1,31 +1,36 @@
 #pragma once
-#include <iostream>
+
+#include <string>
+#include <unordered_map>
 #include <optional>
-#include <enums.h>
 #include <models/account.h>
 
-class bank_account : public account {
+class bank_account : public account, public virtual entity {
 public:
-    bank_account(std::string account_name, std::string account_number,
+    bank_account();
+    bank_account(std::string account_number,
                  std::string bank_name, double balance,
-                 double hold_amount = 0, std::optional<std::string> ifsc_code = std::nullopt)
-        : account(account_name, account_type::BANK_ACCOUNT),
-          _account_number(account_number), _bank_name(bank_name),
-          _balance(balance), _hold_amount(hold_amount), _ifsc_code(ifsc_code) {}
+                 double hold_amount = 0, std::optional<std::string> ifsc_code = std::nullopt);
 
     // Getters
-    std::string get_account_number() const { return _account_number; }
-    std::string get_bank_name() const { return _bank_name; }
-    double get_balance() const { return _balance; }
-    double get_hold_amount() const { return _hold_amount; }
-    std::optional<std::string> get_ifsc_code() const { return _ifsc_code; }
+    std::string account_number() const;
+    std::string bank_name() const;
+    double balance() const;
+    double hold_amount() const;
+    std::optional<std::string> ifsc_code() const;
 
     // Setters
-    void set_account_number(const std::string& account_number) { _account_number = account_number; }
-    void set_bank_name(const std::string& bank_name) { _bank_name = bank_name; }
-    void set_balance(double balance) { _balance = balance; }
-    void set_hold_amount(double hold_amount) { _hold_amount = hold_amount; }
-    void set_ifsc_code(std::optional<std::string> ifsc_code) { _ifsc_code = ifsc_code; }
+    void account_number(const std::string& account_number);
+    void bank_name(const std::string& bank_name);
+    void balance(double balance);
+    void hold_amount(double hold_amount);
+    void ifsc_code(std::optional<std::string> ifsc_code);
+
+    // DB specific methods
+    std::string table_name() const override;
+    std::unordered_map<std::string, std::string> get() const override;
+    void set(const std::unordered_map<std::string, std::string>& fields) override;
+    void print() const override;
 
 private:
     std::string _account_number;

@@ -16,10 +16,102 @@ database::database(std::string db_name, std::string db_user, std::string db_pass
 }
 
 pqxx::result database::execute_query(const std::string& query){
+  try{
     pqxx::work txn(_connection);
     auto result = txn.exec(query);
     txn.commit();
     return result;
+  }
+  catch (const std::exception& e){
+    std::cout << "QUERY IS: "<<query<<"\n";
+    std::cout << e.what() << std::endl;
+  }
+  return {};
+}
+
+std::string database::insert(std::shared_ptr<entity> entity){
+    std::unordered_map<std::string, std::string> fields = entity->get();
+    std::string table = entity->table_name();
+    std::ostringstream columns, values;
+    for (const auto& [key, value] : fields) {
+        if (!value.empty()) {
+            if (!columns.str().empty()) {
+                columns << ", ";
+                values << ", ";
+            }
+            columns << key;
+            values << "'" << pqxx::to_string(value) << "'";
+        }
+    }
+    std::string query = "INSERT INTO " + table + " (" + columns.str() + ") VALUES (" + values.str() + ") RETURNING id";
+    auto result = execute_query(query);
+    std::string id = result[0][0].c_str();
+    return id;
+}
+
+void database::update(std::shared_ptr<entity> entity){
+    std::unordered_map<std::string, std::string> fields = entity->get();
+    std::string table = entity->table_name();
+    std::string id = fields["id"];
+    fields.erase("id");
+    std::ostringstream updates;
+    for (const auto& [key, value] : fields) {
+        if (!value.empty()) {
+            if (!updates.str().empty()) updates << ", ";
+            updates << key << " = '" << pqxx::to_string(value) << "'";
+        }
+    }
+    std::string query = "UPDATE " + table + " SET " + updates.str() + " WHERE id = '" + id + "'";
+    execute_query(query);
+}
+
+void database::remove(std::shared_ptr<entity> entity){
+    std::unordered_map<std::string, std::string> fields = entity->get();
+    std::string table = entity->table_name();
+    std::string id = fields["id"];
+    std::string query = "DELETE FROM " + table + " WHERE id = '" + id + "'";
+    execute_query(query);
+}
+
+void database::fetch(std::shared_ptr<entity> entity){
+    std::unordered_map<std::string, std::string> fields = entity->get();
+    std::string table = entity->table_name();
+    std::string id = fields["id"];
+    std::string query = "SELECT * FROM " + table + " WHERE id = '" + id + "'";
+    auto result = execute_query(query);
+    std::unordered_map<std::string, std::string> record;
+    auto row = result[0];
+    for (const auto& field : row) {
+        record[field.name()] = field.as<std::string>();
+    }
+    entity->set(record);
+}
+
+std::vector<std::unordered_map<std::string, std::string>> database::select(std::shared_ptr<entity> entity)
+{
+    std::unordered_map<std::string, std::string> filters = entity->get();
+    std::string table = entity->table_name();
+    std::ostringstream where_clause;
+    for (const auto& [key, value] : filters) {
+        if (!value.empty()) {
+            if (!where_clause.str().empty()) where_clause << " AND ";
+            where_clause << key << " = '" << pqxx::to_string(value) << "'";
+        }
+    }
+    std::string query = "SELECT * FROM " + table;
+    if (!filters.empty()) {
+        query += " WHERE " + where_clause.str();
+    }
+    auto result = execute_query(query);
+    std::vector<std::unordered_map<std::string, std::string>> rows;
+    for (const auto& row : result) {
+        std::unordered_map<std::string, std::string> record;
+        for (const auto& field : row) {
+            record[field.name()] = field.as<std::string>();
+        }
+        rows.push_back(record);
+    }
+    return rows;
 }
 
 void database::create_tables()
@@ -40,15 +132,14 @@ void database::create_tables()
                 CREATE TABLE IF NOT EXISTS accounts (
                     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
                     user_id UUID NOT NULL,
-                    account_name VARCHAR(100) NOT NULL,
                     account_type VARCHAR(50) NOT NULL
                 );
             )",
             R"(
                 CREATE TABLE IF NOT EXISTS bank_accounts (
                     id UUID PRIMARY KEY REFERENCES accounts(id) DEFAULT uuid_generate_v4(),
-                    account_number VARCHAR(30) NOT NULL,
                     bank_name VARCHAR(100) NOT NULL,
+                    account_number VARCHAR(30) NOT NULL,
                     ifsc_code VARCHAR(11),
                     balance DECIMAL(17, 4) NOT NULL,
                     hold_amount DECIMAL(17, 4) NOT NULL DEFAULT 0
@@ -57,21 +148,24 @@ void database::create_tables()
             R"(
                 CREATE TABLE IF NOT EXISTS credit_card_accounts (
                     id UUID PRIMARY KEY REFERENCES accounts(id) DEFAULT uuid_generate_v4(),
+                    card_name VARCHAR(50) NOT NULL,
                     card_number VARCHAR(30) NOT NULL,
                     expiry_date DATE NOT NULL,
-                    cvv NUMERIC(5, 0),
+                    cvv NUMERIC(5, 0) NOT NULL,
                     credit_limit DECIMAL(17, 4) NOT NULL,
                     balance_due DECIMAL(17, 4) NOT NULL,
-                    statement_date DATE NOT NULL,
-                    billing_date DATE NOT NULL
+                    statement_day NUMERIC(2,0) NOT NULL,
+                    billing_date NUMERIC(2,0) NOT NULL
                 );
             )",
             R"(
                 CREATE TABLE IF NOT EXISTS loan_accounts (
                     id UUID PRIMARY KEY REFERENCES accounts(id) DEFAULT uuid_generate_v4(),
+                    loan_name VARCHAR(50) NOT NULL,
+                    loan_account_number VARCHAR(30) NOT NULL,
                     principal_amount DECIMAL(17, 4) NOT NULL,
                     remaining_principal DECIMAL(17, 4) NOT NULL,
-                    interest_rate DECIMAL(5, 2) NOT NULL,
+                    interest_rate_per_annum DECIMAL(5, 2) NOT NULL,
                     installment_start_date DATE NOT NULL,
                     term_in_months INT NOT NULL
                 );
@@ -79,6 +173,7 @@ void database::create_tables()
             R"(
                 CREATE TABLE IF NOT EXISTS borrow_give_accounts (
                     id UUID PRIMARY KEY REFERENCES accounts(id) DEFAULT uuid_generate_v4(),
+                    person_name VARCHAR(50) NOT NULL,
                     balance_due DECIMAL(17, 4) NOT NULL,
                     due_date DATE
                 );
@@ -86,6 +181,7 @@ void database::create_tables()
             R"(
                 CREATE TABLE IF NOT EXISTS category_accounts (
                     id UUID PRIMARY KEY REFERENCES accounts(id) DEFAULT uuid_generate_v4(),
+                    category_name VARCHAR(50) NOT NULL,
                     parent_account_id UUID REFERENCES bank_accounts(id),
                     monthly_budget DECIMAL(17,4),
                     current_balance DECIMAL(17,4) NOT NULL DEFAULT 0,
@@ -95,6 +191,7 @@ void database::create_tables()
             R"(
                 CREATE TABLE IF NOT EXISTS goal_accounts (
                     id UUID PRIMARY KEY REFERENCES accounts(id) DEFAULT uuid_generate_v4(),
+                    goal_name VARCHAR(50) NOT NULL,
                     parent_account_id UUID REFERENCES bank_accounts(id),
                     monthly_budget DECIMAL(17,4),
                     current_balance DECIMAL(17,4) NOT NULL DEFAULT 0,
@@ -106,6 +203,7 @@ void database::create_tables()
             R"(
                 CREATE TABLE IF NOT EXISTS chit_accounts (
                     id UUID PRIMARY KEY REFERENCES accounts(id) DEFAULT uuid_generate_v4(),
+                    chit_name VARCHAR(50) NOT NULL,
                     monthly_budget DECIMAL(17,4),
                     accumulated_balance DECIMAL(17,4) NOT NULL DEFAULT 0,
                     mature_amount DECIMAL(17,4),
@@ -116,6 +214,7 @@ void database::create_tables()
             R"(
                 CREATE TABLE IF NOT EXISTS asset_accounts (
                     id UUID PRIMARY KEY REFERENCES accounts(id) DEFAULT uuid_generate_v4(),
+                    asset_name VARCHAR(50) NOT NULL,
                     asset_type VARCHAR(50) NOT NULL,
                     cost_of_ownership DECIMAL(17,4) NOT NULL,
                     paid_amount DECIMAL(17,4) NOT NULL DEFAULT 0,

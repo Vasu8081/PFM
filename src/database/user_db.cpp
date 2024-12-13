@@ -3,8 +3,8 @@
 std::string user_db::add_user(user& usr) {
   std::stringstream query;
   query << "INSERT INTO users (name, email, mobile, password) VALUES ('"
-        << escape_sql(usr.name()) << "', '"
-        << escape_sql(usr.email()) << "', ";
+        << usr.name() << "', '"
+        << (usr.email()) << "', ";
 
   if (usr.mobile()) {
     query << usr.mobile().value();
@@ -12,7 +12,7 @@ std::string user_db::add_user(user& usr) {
     query << "NULL";
   }
 
-  query << ", '" << escape_sql(usr.password()) << "') RETURNING id;";
+  query << ", '" << (usr.password()) << "') RETURNING id;";
 
   auto result = _db.execute_query(query.str());
 
@@ -31,8 +31,8 @@ void user_db::delete_user(user& user) {
 void user_db::update_user(user& usr) {
   std::stringstream query;
   query << "UPDATE users SET "
-        << "name = '" << escape_sql(usr.name()) << "', "
-        << "email = '" << escape_sql(usr.email()) << "', ";
+        << "name = '" << (usr.name()) << "', "
+        << "email = '" << (usr.email()) << "', ";
 
   if (usr.mobile()) {
     query << "mobile = " << usr.mobile().value() << ", ";
@@ -40,8 +40,8 @@ void user_db::update_user(user& usr) {
     query << "mobile = NULL, ";
   }
 
-  query << "password = '" << escape_sql(usr.password()) << "' "
-        << "WHERE id = '" << escape_sql(usr.id()) << "'";
+  query << "password = '" << (usr.password()) << "' "
+        << "WHERE id = '" << (usr.id()) << "'";
 
   _db.execute_query(query.str());
 }
@@ -84,6 +84,7 @@ std::vector<user> user_db::get_all_users() {
                                      ? std::nullopt
                                      : std::make_optional(std::stol(row["mobile"].c_str()));
       users.emplace_back(
+          row["id"].c_str(),
           row["name"].c_str(),
           row["email"].c_str(),
           row["password"].c_str(),

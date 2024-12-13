@@ -9,15 +9,19 @@ public:
          std::optional<long> mobile = std::nullopt)
         : _name(name), _email(email), _password(password), _mobile(mobile) {}
 
+    user(std::string id, std::string name, std::string email, std::string password,
+         std::optional<long> mobile = std::nullopt)
+        : _id(id), _name(name), _email(email), _password(password), _mobile(mobile) {}
+
     // Getters
-    std::string id() const { return _name; }
+    std::string id() const { return _id; }
     std::string name() const { return _name; }
     std::string email() const { return _email; }
     std::string password() const { return _password; }
     std::optional<long> mobile() const { return _mobile; }
 
     // Setters
-    void id(int id) { _id = id; }
+    void id(std::string id) { _id = id; }
     void name(const std::string& name) { _name = name; }
     void email(const std::string& email) { _email = email; }
     void password(const std::string& password) { _password = password; }

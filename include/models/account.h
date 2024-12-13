@@ -1,27 +1,38 @@
 #pragma once
-#include <iostream>
-#include <enums.h>
 
-class account {
+#include <string>
+#include <unordered_map>
+#include "enums.h"
+#include <database/entity.h>
+
+class account : public virtual entity {
 public:
-  account(std::string account_name, account_type account_type)
-  : _account_name(account_name), _account_type(account_type) {}
+    account();
+    account(std::string id);
+    account(std::string id, enums::account_type account_type);
+    account(std::string id, std::string user_id, enums::account_type account_type);
+    account(const std::unordered_map<std::string, std::string>& fields);
 
-  // Getters
-  std::string id() const { return _id; }
-  std::string user_id() const { return _user_id; }
-  std::string account_name() const { return _account_name; }
-  account_type account_type() const { return _account_type; }
+    ~account() override = default;
 
-  // Setters
-  void id(std::string id) { _id = id; }
-  void user_id(std::string user_id) { _user_id = user_id; }
-  void account_name(const std::string& account_name) { _account_name = account_name; }
-  void account_type(enum account_type account_type) { _account_type = account_type; }
+    // Getters
+    std::string id() const;
+    std::string user_id() const;
+    enums::account_type account_type() const;
+
+    // Setters
+    void id(std::string id);
+    void user_id(std::string user_id);
+    void account_type(enums::account_type account_type);
+
+    // DB specific methods
+    std::string table_name() const override;
+    std::unordered_map<std::string, std::string> get() const override;
+    void set(const std::unordered_map<std::string, std::string>& fields) override;
+    void print() const override;
 
 private:
-  std::string _id;
-  std::string _user_id;
-  std::string _account_name;
-  enum account_type _account_type;
+    std::string _id;
+    std::string _user_id;
+    enums::account_type _account_type;
 };
