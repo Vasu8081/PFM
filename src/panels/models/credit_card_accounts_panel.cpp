@@ -59,6 +59,7 @@ credit_card_accounts_panel::credit_card_accounts_panel(wxWindow *parent, std::sh
 }
 
 void credit_card_accounts_panel::save() {
+    _account->account_type(enums::CREDIT_CARD_ACCOUNT);
     _account->card_name(std::string(_card_name_ctrl->GetValue().mb_str()));
     _account->card_number(std::string(_card_number_ctrl->GetValue().mb_str()));
     _account->expiry_date(std::string(_expiry_date_ctrl->GetValue().mb_str()));

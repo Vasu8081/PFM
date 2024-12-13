@@ -14,7 +14,7 @@ public:
   void update(std::unordered_map<std::string, std::string>& fields, std::string table);
   void remove(std::unordered_map<std::string, std::string>& fields, std::string table);
   void fetch(std::unordered_map<std::string, std::string>& fields, std::string table);
-  std::vector<std::unordered_map<std::string, std::string>> select(std::unordered_map<std::string, std::string>& filters, std::string table);
+  std::vector<std::unordered_map<std::string, std::string>> select(std::unordered_map<std::string, std::string> filters, std::string table);
 
 private:
   pqxx::connection _connection;

@@ -1,5 +1,12 @@
 #include <utils/utils.h>
 #include <enums.h>
+#include <models/bank_account.h>
+#include <models/borrow_give_account.h>
+#include <models/category_account.h>
+#include <models/chit_account.h>
+#include <models/credit_card_account.h>
+#include <models/goal_account.h>
+#include <models/loan_account.h>
 
 std::string account_t(enums::account_type type) {
   using namespace enums;
@@ -57,4 +64,30 @@ enums::account_type account_t(std::string type){
         return CHIT_ACCOUNT;
     }
     return ACCOUNT_TYPE_UNKNOWN;
+}
+
+std::shared_ptr<account> get_account_pointer(std::string table_name)
+{
+    if (table_name == "bank_accounts") {
+        return std::make_shared<bank_account>();
+    }
+    if (table_name == "credit_card_accounts") {
+        return std::make_shared<credit_card_account>();
+    }
+    if (table_name == "loan_accounts") {
+        return std::make_shared<loan_account>();
+    }
+    if (table_name == "borrow_give_accounts") {
+        return std::make_shared<borrow_give_account>();
+    }
+    if (table_name == "category_accounts") {
+        return std::make_shared<category_account>();
+    }
+    if ( table_name == "goal_accounts") {
+        return std::make_shared<goal_account>();
+    }
+    if (table_name == "chit_accounts") {
+        return std::make_shared<chit_account>();
+    }
+    return nullptr;
 }

@@ -1,6 +1,8 @@
 #include <models/borrow_give_account.h>
 
-borrow_give_account::borrow_give_account() = default;
+borrow_give_account::borrow_give_account()  {
+    account_type(enums::account_type::BORROW_GIVE_ACCOUNT);
+}
 
 borrow_give_account::borrow_give_account(std::string person_name, double balance_due,
                                          std::optional<std::string> due_date)

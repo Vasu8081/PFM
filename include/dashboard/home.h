@@ -2,6 +2,7 @@
 
 #include <wx/wx.h>
 #include <panels/create_accounts.h>
+#include <panels/dashboard_panel.h>
 
 class home: public wxFrame {
 public:
@@ -15,5 +16,6 @@ public:
 private:
     wxSizer* _main_sizer;
     create_accounts_panel* _create_accounts;
+    dashboard_panel* _dashboard;
     wxNotebook* _notebook;
 };

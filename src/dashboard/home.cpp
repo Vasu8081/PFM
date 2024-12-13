@@ -20,8 +20,8 @@ void home::add_create_accounts_page() {
 }
 
 void home::add_dashboard_page() {
-    auto dash = new wxPanel(_notebook, wxID_ANY);
-    _notebook->AddPage(dash, "Dashboard");
+    _dashboard = new dashboard_panel(_notebook);
+    _notebook->AddPage(_dashboard, "Dashboard");
 }
 
 void home::add_transactions_page() {

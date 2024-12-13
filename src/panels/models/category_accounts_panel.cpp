@@ -1,16 +1,16 @@
-#include <panels/goal_accounts_panel.h>
+#include <panels/category_accounts_panel.h>
 
-goal_accounts_panel::goal_accounts_panel(wxWindow *parent, std::shared_ptr<account> account)
+category_accounts_panel::category_accounts_panel(wxWindow *parent, std::shared_ptr<account> account)
 : wxPanel(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize)
 {
-    _account = std::dynamic_pointer_cast<goal_account>(account);
+    _account = std::dynamic_pointer_cast<category_account>(account);
     _main_sizer = new wxBoxSizer(wxVERTICAL);
 
-    // Goal Name
-    auto* goal_name_label = new wxStaticText(this, wxID_ANY, "Goal Name:");
-    _goal_name_ctrl = new wxTextCtrl(this, wxID_ANY, _account->goal_name());
-    _main_sizer->Add(goal_name_label, 0, wxALL, 5);
-    _main_sizer->Add(_goal_name_ctrl, 0, wxEXPAND | wxALL, 5);
+    // Category Name
+    auto* category_name_label = new wxStaticText(this, wxID_ANY, "Category Name:");
+    _category_name_ctrl = new wxTextCtrl(this, wxID_ANY, _account->category_name());
+    _main_sizer->Add(category_name_label, 0, wxALL, 5);
+    _main_sizer->Add(_category_name_ctrl, 0, wxEXPAND | wxALL, 5);
 
     // Parent Account ID
     auto* parent_account_id_label = new wxStaticText(this, wxID_ANY, "Parent Account ID:");
@@ -30,18 +30,6 @@ goal_accounts_panel::goal_accounts_panel(wxWindow *parent, std::shared_ptr<accou
     _main_sizer->Add(current_balance_label, 0, wxALL, 5);
     _main_sizer->Add(_current_balance_ctrl, 0, wxEXPAND | wxALL, 5);
 
-    // Target Amount
-    auto* target_amount_label = new wxStaticText(this, wxID_ANY, "Target Amount:");
-    _target_amount_ctrl = new wxTextCtrl(this, wxID_ANY, std::to_string(_account->target_amount()));
-    _main_sizer->Add(target_amount_label, 0, wxALL, 5);
-    _main_sizer->Add(_target_amount_ctrl, 0, wxEXPAND | wxALL, 5);
-
-    // Target Date
-    auto* target_date_label = new wxStaticText(this, wxID_ANY, "Target Date:");
-    _target_date_ctrl = new wxTextCtrl(this, wxID_ANY, _account->target_date().value_or(""));
-    _main_sizer->Add(target_date_label, 0, wxALL, 5);
-    _main_sizer->Add(_target_date_ctrl, 0, wxEXPAND | wxALL, 5);
-
     // Last Added Date
     auto* last_added_date_label = new wxStaticText(this, wxID_ANY, "Last Added Date:");
     _last_added_date_ctrl = new wxTextCtrl(this, wxID_ANY, _account->last_added_date().value_or(""));
@@ -52,14 +40,14 @@ goal_accounts_panel::goal_accounts_panel(wxWindow *parent, std::shared_ptr<accou
     Layout();
 }
 
-void goal_accounts_panel::save() {
-    _account->goal_name(std::string(_goal_name_ctrl->GetValue().mb_str()));
+void category_accounts_panel::save() {
+    _account->account_type(enums::CATEGORY_ACCOUNT);
+    _account->category_name(std::string(_category_name_ctrl->GetValue().mb_str()));
     _account->parent_account_id(std::string(_parent_account_id_ctrl->GetValue().mb_str()));
     _account->monthly_budget(std::stod(std::string(_monthly_budget_ctrl->GetValue().mb_str())));
     _account->current_balance(std::stod(std::string(_current_balance_ctrl->GetValue().mb_str())));
-    _account->target_amount(std::stod(std::string(_target_amount_ctrl->GetValue().mb_str())));
-    _account->target_date(std::string(_target_date_ctrl->GetValue().mb_str()));
-    _account->last_added_date(std::string(_last_added_date_ctrl->GetValue().mb_str()));
+    std::string last_added_date = std::string(_last_added_date_ctrl->GetValue().mb_str());
+    _account->last_added_date(last_added_date.empty() ? std::nullopt : std::make_optional(last_added_date));
     _account->print();
     _account->save();
 }

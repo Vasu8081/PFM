@@ -39,6 +39,7 @@ std::unordered_map<std::string, std::string> user::get() const {
 }
 
 void user::set(const std::unordered_map<std::string, std::string>& fields) {
+    if (!fields.contains("id")) {return;}
     _id = fields.at("id");
     _name = fields.at("name");
     _email = fields.at("email");
@@ -52,7 +53,10 @@ void user::set(const std::unordered_map<std::string, std::string>& fields) {
 
 void user::save() {
     auto fields = this->get();
-    db->insert(fields, table_name());
+    if (id().empty()) {
+        db->insert(fields, table_name());
+    }
+    db->update(fields, table_name());
     set(fields);
 }
 

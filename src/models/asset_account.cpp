@@ -1,6 +1,8 @@
 #include <models/asset_account.h>
 
-asset_account::asset_account() = default;
+asset_account::asset_account() {
+    account_type(enums::account_type::ASSET_ACCOUNT);
+}
 
 asset_account::asset_account(std::string asset_name, std::string asset_type, double cost_of_ownership,
                              double paid_amount, double current_market_value, std::string purchase_date)

@@ -16,13 +16,14 @@ bool PFM::OnInit() {
     std::unordered_map<std::string, std::string> filters;
     std::string table_name = "users";
     auto res = db.select(filters, table_name);
+    user u({});
     for (auto r : res ) {
-        user u(r);
+        u.set(r);
         u.print();
     }
-    // global_config.user_id = usr[0].id();
-    // auto dashboard = new home();
-    // dashboard->Show();
+    global_config.user_id = u.id();
+    auto dashboard = new home();
+    dashboard->Show();
     return true;
 }
 

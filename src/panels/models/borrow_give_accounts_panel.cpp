@@ -29,6 +29,7 @@ borrow_give_accounts_panel::borrow_give_accounts_panel(wxWindow *parent, std::sh
 }
 
 void borrow_give_accounts_panel::save() {
+    _account->account_type(enums::BORROW_GIVE_ACCOUNT);
     _account->person_name(std::string(_person_name_ctrl->GetValue().mb_str()));
     _account->balance_due(std::stod(std::string(_balance_due_ctrl->GetValue().mb_str())));
     std::string due_date = std::string(_due_date_ctrl->GetValue().mb_str());

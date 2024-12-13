@@ -47,6 +47,7 @@ chit_accounts_panel::chit_accounts_panel(wxWindow *parent, std::shared_ptr<accou
 }
 
 void chit_accounts_panel::save() {
+    _account->account_type(enums::CHIT_ACCOUNT);
     _account->chit_name(std::string(_chit_name_ctrl->GetValue().mb_str()));
     _account->monthly_budget(std::stod(std::string(_monthly_budget_ctrl->GetValue().mb_str())));
     _account->accumulated_balance(std::stod(std::string(_accumulated_balance_ctrl->GetValue().mb_str())));

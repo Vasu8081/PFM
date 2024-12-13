@@ -41,6 +41,7 @@ bank_accounts_panel::bank_accounts_panel(wxWindow *parent, std::shared_ptr<accou
 }
 
 void bank_accounts_panel::save() {
+    _account->account_type(enums::BANK_ACCOUNT);
     _account->account_number(std::string(_account_number_ctrl->GetValue().mb_str()));
     _account->bank_name(std::string(_bank_name_ctrl->GetValue().mb_str()));
     _account->balance(std::stod(std::string(_balance_ctrl->GetValue().mb_str())));

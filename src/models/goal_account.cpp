@@ -1,6 +1,8 @@
 #include <models/goal_account.h>
 
-goal_account::goal_account() = default;
+goal_account::goal_account()  {
+    account_type(enums::account_type::GOAL_ACCOUNT);
+}
 
 goal_account::goal_account(std::string goal_name, std::string parent_account_id,
                            double monthly_budget, double current_balance,

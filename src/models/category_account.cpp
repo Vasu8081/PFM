@@ -1,6 +1,8 @@
 #include <models/category_account.h>
 
-category_account::category_account() = default;
+category_account::category_account()  {
+    account_type(enums::account_type::CATEGORY_ACCOUNT);
+}
 
 category_account::category_account(std::string category_name, std::string parent_account_id,
                                    double monthly_budget, double current_balance,

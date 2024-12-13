@@ -1,7 +1,6 @@
 #pragma once
 
 #include <wx/wx.h>
-#include <wx/dialog.h>
 #include <wx/notebook.h>
 #include <enums.h>
 #include <panels/bank_accounts_panel.h>

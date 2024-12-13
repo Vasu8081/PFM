@@ -1,6 +1,8 @@
 #include <models/credit_card_account.h>
 
-credit_card_account::credit_card_account() = default;
+credit_card_account::credit_card_account()  {
+    account_type(enums::account_type::CREDIT_CARD_ACCOUNT);
+}
 
 credit_card_account::credit_card_account(std::string card_name, std::string card_number,
                                          std::string expiry_date, unsigned int cvv, double credit_limit,

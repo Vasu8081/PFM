@@ -1,6 +1,8 @@
 #include <models/chit_account.h>
 
-chit_account::chit_account() = default;
+chit_account::chit_account()  {
+    account_type(enums::account_type::CHIT_ACCOUNT);
+}
 
 chit_account::chit_account(std::string chit_name, double monthly_budget, double accumulated_balance,
                            double mature_amount, std::optional<std::string> mature_date,

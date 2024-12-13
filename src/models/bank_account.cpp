@@ -1,7 +1,9 @@
 #include <models/bank_account.h>
 
 
-bank_account::bank_account() = default;
+bank_account::bank_account() {
+    account_type(enums::account_type::BANK_ACCOUNT);
+}
 
 bank_account::bank_account(std::string account_number,
                            std::string bank_name, double balance,

@@ -1,6 +1,8 @@
 #include <models/loan_account.h>
 
-loan_account::loan_account() = default;
+loan_account::loan_account()  {
+    account_type(enums::account_type::LOAN_ACCOUNT);
+}
 
 loan_account::loan_account(std::string loan_name, std::string loan_account_number,
                            double principal_amount, double remaining_principal,

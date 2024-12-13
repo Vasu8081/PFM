@@ -53,6 +53,7 @@ loan_accounts_panel::loan_accounts_panel(wxWindow *parent, std::shared_ptr<accou
 }
 
 void loan_accounts_panel::save() {
+    _account->account_type(enums::LOAN_ACCOUNT);
     _account->loan_name(std::string(_loan_name_ctrl->GetValue().mb_str()));
     _account->loan_account_number(std::string(_loan_account_number_ctrl->GetValue().mb_str()));
     _account->principal_amount(std::stod(std::string(_principal_amount_ctrl->GetValue().mb_str())));

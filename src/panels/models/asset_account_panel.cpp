@@ -47,6 +47,7 @@ asset_accounts_panel::asset_accounts_panel(wxWindow *parent, std::shared_ptr<acc
 }
 
 void asset_accounts_panel::save() {
+    _account->account_type(enums::ASSET_ACCOUNT);
     _account->asset_name(std::string(_asset_name_ctrl->GetValue().mb_str()));
     _account->asset_type(std::string(_asset_type_ctrl->GetValue().mb_str()));
     _account->cost_of_ownership(std::stod(std::string(_cost_of_ownership_ctrl->GetValue().mb_str())));

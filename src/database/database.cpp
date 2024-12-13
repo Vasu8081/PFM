@@ -61,6 +61,7 @@ void database::update(std::unordered_map<std::string, std::string>& fields, std:
     }
     std::string query = "UPDATE " + table + " SET " + updates.str() + " WHERE id = '" + id + "'";
     execute_query(query);
+    fields["id"] = id;
 }
 
 void database::remove(std::unordered_map<std::string, std::string>& fields, std::string table){
@@ -80,7 +81,7 @@ void database::fetch(std::unordered_map<std::string, std::string>& fields, std::
     }
 }
 
-std::vector<std::unordered_map<std::string, std::string>> database::select(std::unordered_map<std::string, std::string>& filters, std::string table)
+std::vector<std::unordered_map<std::string, std::string>> database::select(std::unordered_map<std::string, std::string> filters, std::string table)
 {
     std::ostringstream where_clause;
     for (const auto& [key, value] : filters) {
