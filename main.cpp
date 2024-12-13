@@ -1,7 +1,8 @@
 #include <wx/wx.h>
 #include <dashboard/home.h>
 #include <config.h>
-#include <database/user_db.h>
+#include <database/database.h>
+#include <models/user.h>
 
 config global_config;
 
@@ -11,16 +12,17 @@ public:
 };
 
 bool PFM::OnInit() {
-    auto udb = new user_db();
-    auto usr = udb->get_all_users();
-    // if (usr.size() == 0) {
-    //     user u("vkandula", "vasudhanvarma@gmail.com", "vkandula", "6381851146");
-    //     udb->add_user(u);
-    // }
-    // usr = udb->get_all_users();
-    global_config.user_id = usr[0].id();
-    auto dashboard = new home();
-    dashboard->Show();
+    database db;
+    std::unordered_map<std::string, std::string> filters;
+    std::string table_name = "users";
+    auto res = db.select(filters, table_name);
+    for (auto r : res ) {
+        user u(r);
+        u.print();
+    }
+    // global_config.user_id = usr[0].id();
+    // auto dashboard = new home();
+    // dashboard->Show();
     return true;
 }
 

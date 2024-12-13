@@ -98,7 +98,10 @@ std::vector<std::unordered_map<std::string, std::string>> database::select(std::
     for (const auto& row : result) {
         std::unordered_map<std::string, std::string> record;
         for (const auto& field : row) {
-            record[field.name()] = field.as<std::string>();
+            if (!field.is_null())
+                record[field.name()] = field.as<std::string>();
+            else
+                record[field.name()] = "NULL";
         }
         rows.push_back(record);
     }

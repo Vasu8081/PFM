@@ -9,5 +9,6 @@ add_library(models STATIC
         goal_account.cpp
         loan_account.cpp
         transaction.cpp
+        user.cpp
 )
 target_include_directories(models PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
