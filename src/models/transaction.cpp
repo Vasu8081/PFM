@@ -75,7 +75,16 @@ void transaction::set(const std::unordered_map<std::string, std::string>& fields
 
 void transaction::save() {
     auto fields = get();
-    db->insert(fields, table_name());
+    if (id().empty()) {
+        db->insert(fields, table_name());
+    }
+    db->update(fields, table_name());
+    set(fields);
+}
+
+void transaction::load() {
+    auto fields = get();
+    db->fetch(fields, table_name());
     set(fields);
 }
 

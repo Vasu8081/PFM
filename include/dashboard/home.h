@@ -7,6 +7,8 @@
 class home: public wxFrame {
 public:
     home();
+    void load_accounts();
+    void load_transactions();
     void add_dashboard_page();
     void add_create_accounts_page();
     void add_transactions_page();
@@ -18,4 +20,5 @@ private:
     create_accounts_panel* _create_accounts;
     dashboard_panel* _dashboard;
     wxNotebook* _notebook;
+    database db;
 };

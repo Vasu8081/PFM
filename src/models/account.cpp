@@ -55,7 +55,16 @@ void account::set(const std::unordered_map<std::string, std::string>& fields) {
 
 void account::save() {
     auto fields = account::get();
-    db->insert(fields, account::table_name());
+    if (id().empty()) {
+        db->insert(fields, account::table_name());
+    }
+    db->update(fields, account::table_name());
+    account::set(fields);
+}
+
+void account::load() {
+    auto fields = account::get();
+    db->fetch(fields, account::table_name());
     account::set(fields);
 }
 

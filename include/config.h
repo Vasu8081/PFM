@@ -2,6 +2,7 @@
 #define VERSION "0.0.1"
 
 #include <string>
+#include <models/transaction.h>
 
 struct database_config {
   std::string database_name = "finance_app";
@@ -14,6 +15,8 @@ struct database_config {
 struct config {
   std::string user_id;
   database_config db_config;
+  std::map<std::string, std::shared_ptr<account>> accounts;
+  std::map<std::string, std::shared_ptr<transaction>> transactions;
 };
 
 extern config global_config;

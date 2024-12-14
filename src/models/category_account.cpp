@@ -82,10 +82,19 @@ void category_account::set(const std::unordered_map<std::string, std::string>& f
 void category_account::save() {
     account::save();
     auto fields = get();
-    db->insert(fields, table_name());
+    if (id().empty()) {
+        db->insert(fields, table_name());
+    }
+    db->update(fields, table_name());
     set(fields);
 }
 
+void category_account::load() {
+    account::load();
+    auto fields = get();
+    db->fetch(fields, table_name());
+    set(fields);
+}
 
 void category_account::print() const {
     std::stringstream text;

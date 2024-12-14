@@ -91,7 +91,17 @@ void asset_account::set(const std::unordered_map<std::string, std::string>& fiel
 void asset_account::save() {
     account::save();
     auto fields = get();
-    db->insert(fields, table_name());
+    if (id().empty()) {
+        db->insert(fields, table_name());
+    }
+    db->update(fields, table_name());
+    set(fields);
+}
+
+void asset_account::load() {
+    account::load();
+    auto fields = get();
+    db->fetch(fields, table_name());
     set(fields);
 }
 

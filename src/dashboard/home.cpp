@@ -5,6 +5,9 @@ home::home(): wxFrame(NULL, wxID_ANY, wxT("Dashboard"), wxDefaultPosition,wxDefa
     _notebook = new wxNotebook(this, wxID_ANY);
     _main_sizer->Add(_notebook, 1, wxEXPAND | wxALL, 10);
 
+    load_accounts();
+    load_transactions();
+
     add_dashboard_page();
     add_create_accounts_page();
     add_transactions_page();
@@ -32,4 +35,26 @@ void home::add_transactions_page() {
 void home::add_categories_view_page() {
     auto dash = new wxPanel(_notebook, wxID_ANY);
     _notebook->AddPage(dash, "Categories");
+}
+
+void home::load_accounts() {
+    global_config.accounts.clear();
+    for (const auto& table: all_account_types ) {
+        auto rows = db.select({}, table);
+        for (const auto& row: rows) {
+            auto acc = get_account_pointer(table);
+            acc->set(row);
+            global_config.accounts[acc->id()] = acc;
+        }
+    }
+}
+
+void home::load_transactions() {
+    global_config.transactions.clear();
+    auto rows = db.select({}, "transactions");
+    for (const auto& row: rows) {
+        auto tr = std::make_shared<transaction>();
+        tr->set(row);
+        global_config.transactions[tr->id()] = tr;
+    }
 }

@@ -112,7 +112,17 @@ void credit_card_account::set(const std::unordered_map<std::string, std::string>
 void credit_card_account::save() {
     account::save();
     auto fields = get();
-    db->insert(fields, table_name());
+    if (id().empty()) {
+        db->insert(fields, table_name());
+    }
+    db->update(fields, table_name());
+    set(fields);
+}
+
+void credit_card_account::load() {
+    account::load();
+    auto fields = get();
+    db->fetch(fields, table_name());
     set(fields);
 }
 

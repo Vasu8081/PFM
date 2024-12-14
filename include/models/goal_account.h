@@ -36,6 +36,7 @@ public:
     std::unordered_map<std::string, std::string> get() const override;
     void set(const std::unordered_map<std::string, std::string>& fields) override;
     void save() override;
+    void load() override;
     void print() const override;
 
 private:

@@ -52,15 +52,6 @@ void user_panel::save()
         mobile = std::stol(std::string(_mobile_ctrl->GetValue().mb_str()));
     }
     _usr->mobile(mobile);
-
-    std::cout << "User data saved: " << std::endl;
-    std::cout << "ID: " << _usr->id() << std::endl;
-    std::cout << "Name: " << _usr->name() << std::endl;
-    std::cout << "Email: " << _usr->email() << std::endl;
-    std::cout << "Password: " << _usr->password() << std::endl;
-    if (_usr->mobile()) {
-        std::cout << "Mobile: " << _usr->mobile().value() << std::endl;
-    } else {
-        std::cout << "Mobile: Not provided" << std::endl;
-    }
+    _usr->print();
+    _usr->save();
 }

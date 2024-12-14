@@ -62,5 +62,11 @@ void loan_accounts_panel::save() {
     _account->installment_start_date(std::string(_installment_start_date_ctrl->GetValue().mb_str()));
     _account->term_in_months(std::stoi(std::string(_term_in_months_ctrl->GetValue().mb_str())));
     _account->print();
-    _account->save();
+    if (_account->id().empty()) {
+        _account->save();
+        global_config.accounts[_account->id()] = _account;
+    }
+    else {
+        _account->save();
+    }
 }

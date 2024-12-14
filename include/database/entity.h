@@ -13,6 +13,7 @@ public:
   virtual std::unordered_map<std::string, std::string> get() const = 0;
   virtual void set(const std::unordered_map<std::string, std::string>& map) = 0;
   virtual void save() = 0;
+  virtual void load() = 0;
 protected:
   std::shared_ptr<database> db;
 };

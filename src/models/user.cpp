@@ -60,6 +60,12 @@ void user::save() {
     set(fields);
 }
 
+void user::load() {
+    auto fields = this->get();
+    db->fetch(fields, table_name());
+    set(fields);
+}
+
 void user::print() const {
     std::stringstream ss;
     ss << "ID: " << _id << std::endl;

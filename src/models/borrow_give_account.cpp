@@ -63,6 +63,13 @@ void borrow_give_account::save() {
     set(fields);
 }
 
+void borrow_give_account::load() {
+    account::load();
+    auto fields = get();
+    db->fetch(fields, table_name());
+    set(fields);
+}
+
 void borrow_give_account::print() const {
     std::stringstream text;
     text << "account_type: " << account_t(account_type()) << std::endl;

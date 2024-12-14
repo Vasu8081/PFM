@@ -60,5 +60,11 @@ void chit_accounts_panel::save() {
     _account->last_added_date(last_added_date.empty() ? std::nullopt : std::make_optional(last_added_date));
 
     _account->print();
-    _account->save();
+    if (_account->id().empty()) {
+        _account->save();
+        global_config.accounts[_account->id()] = _account;
+    }
+    else {
+        _account->save();
+    }
 }

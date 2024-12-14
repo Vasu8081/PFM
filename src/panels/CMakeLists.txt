@@ -11,5 +11,6 @@ add_library(panels STATIC
         models/transactions_panel.cpp
         models/users_panel.cpp
         dashboard_panel.cpp
+        transaction_panel.cpp
 )
 target_include_directories(panels PUBLIC .)
