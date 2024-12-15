@@ -76,11 +76,11 @@ void transaction_panel::save()
     _txn->date(std::string(_date_ctrl->GetValue().mb_str()));
     _txn->proof_document(std::optional<std::string>(std::string(_proof_document_ctrl->GetValue().mb_str())));
     _txn->print();
-    if (_account->id().empty()) {
-        _account->save();
-        global_config.accounts[_account->id()] = _account;
+    if (_txn->id().empty()) {
+        _txn->save();
+        global_config.transactions[_txn->id()] = _txn;
     }
     else {
-        _account->save();
+        _txn->save();
     }
 }

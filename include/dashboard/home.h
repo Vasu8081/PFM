@@ -3,6 +3,7 @@
 #include <wx/wx.h>
 #include <panels/create_accounts.h>
 #include <panels/dashboard_panel.h>
+#include <panels/transaction_panel.h>
 
 class home: public wxFrame {
 public:

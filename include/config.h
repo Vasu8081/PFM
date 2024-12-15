@@ -2,7 +2,8 @@
 #define VERSION "0.0.1"
 
 #include <string>
-#include <models/transaction.h>
+class transaction;
+class account;
 
 struct database_config {
   std::string database_name = "finance_app";

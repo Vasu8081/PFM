@@ -4,8 +4,6 @@
 #include <unordered_map>
 #include <optional>
 #include <database/entity.h>
-#include <models/account.h>
-#include <models/category_account.h>
 
 class transaction : public virtual entity {
 public:
