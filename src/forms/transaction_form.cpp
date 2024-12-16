@@ -1,5 +1,7 @@
+#include <forms/expense_form.h>
 #include <forms/forms_include.h>
 #include <forms/income_form.h>
+#include <forms/transfer_form.h>
 
 transaction_form::transaction_form(wxWindow* parent, std::shared_ptr<transaction> txn)
     : wxPanel(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize)
@@ -25,13 +27,15 @@ void transaction_form::add_income_page() {
 }
 
 void transaction_form::add_expense_page() {
-    auto form = new wxPanel(_notebook);
+    auto form = new expense_form(_notebook, _txn);
     _notebook->AddPage(form, wxString("Expense Page"));
+    _forms.push_back(form);
 }
 
 void transaction_form::add_transfer_page() {
-    auto form = new wxPanel(_notebook);
+    auto form = new transfer_form(_notebook, _txn);
     _notebook->AddPage(form, wxString("Transfer Page"));
+    _forms.push_back(form);
 }
 
 void transaction_form::save()

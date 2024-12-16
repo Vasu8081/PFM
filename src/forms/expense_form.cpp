@@ -1,15 +1,15 @@
-#include <forms/income_form.h>
+#include <forms/expense_form.h>
 #include <models/account.h>
 
-income_form::income_form(wxWindow* parent, std::shared_ptr<transaction> transaction)
+expense_form::expense_form(wxWindow* parent, std::shared_ptr<transaction> transaction)
     : wxPanel(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize), _transaction(transaction)
 {
     _main_sizer = new wxBoxSizer(wxVERTICAL);
 
-    auto to_account_label = new wxStaticText(this, wxID_ANY, "To Account:");
-    _to_account_ctrl = new wxComboBox(this, wxID_ANY);
-    _main_sizer->Add(to_account_label, 0, wxALL | wxEXPAND, 5);
-    _main_sizer->Add(_to_account_ctrl, 0, wxALL | wxEXPAND, 5);
+    auto from_account_label = new wxStaticText(this, wxID_ANY, "From Account:");
+    _from_account_ctrl = new wxComboBox(this, wxID_ANY);
+    _main_sizer->Add(from_account_label, 0, wxALL | wxEXPAND, 5);
+    _main_sizer->Add(_from_account_ctrl, 0, wxALL | wxEXPAND, 5);
 
     auto category_account_label = new wxStaticText(this, wxID_ANY, "Category:");
     _category_account_ctrl = new wxComboBox(this, wxID_ANY);
@@ -23,7 +23,7 @@ income_form::income_form(wxWindow* parent, std::shared_ptr<transaction> transact
         if (acc.second->account_type() == enums::account_type::CATEGORY_ACCOUNT) {
             _category_account_ctrl->Append(account_name, account_id_data);
         } else {
-            _to_account_ctrl->Append(account_name, account_id_data);
+            _from_account_ctrl->Append(account_name, account_id_data);
         }
     }
 
@@ -51,12 +51,12 @@ income_form::income_form(wxWindow* parent, std::shared_ptr<transaction> transact
     Layout();
 }
 
-void income_form::save() {
-    int to_account_selection = _to_account_ctrl->GetSelection();
+void expense_form::save() {
+    int from_account_selection = _from_account_ctrl->GetSelection();
     int category_account_selection = _category_account_ctrl->GetSelection();
 
-    wxString to_account_id = (to_account_selection != wxNOT_FOUND && _to_account_ctrl->GetClientData(to_account_selection))
-        ? *static_cast<wxString*>(_to_account_ctrl->GetClientData(to_account_selection))
+    wxString from_account_id = (from_account_selection != wxNOT_FOUND && _from_account_ctrl->GetClientData(from_account_selection))
+        ? *static_cast<wxString*>(_from_account_ctrl->GetClientData(from_account_selection))
         : "";
     wxString category_account_id = (category_account_selection != wxNOT_FOUND && _category_account_ctrl->GetClientData(category_account_selection))
         ? *static_cast<wxString*>(_category_account_ctrl->GetClientData(category_account_selection))
@@ -73,13 +73,13 @@ void income_form::save() {
         return;
     }
 
-    if (to_account_id.IsEmpty() || category_account_id.IsEmpty() || amount <= 0) {
+    if (from_account_id.IsEmpty() || category_account_id.IsEmpty() || amount <= 0) {
         wxMessageBox("Please fill all required fields with valid data.", "Error", wxOK | wxICON_ERROR);
         return;
     }
 
-    _transaction->transaction_type("INCOME");
-    _transaction->to_account_id(to_account_id.ToStdString());
+    _transaction->transaction_type("EXPENSE");
+    _transaction->from_account_id(from_account_id.ToStdString());
     _transaction->category_account_id(category_account_id.ToStdString());
     _transaction->description(description.ToStdString());
     _transaction->amount(amount);

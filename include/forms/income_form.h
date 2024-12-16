@@ -9,7 +9,7 @@
 class income_form : public wxPanel, public model_form {
 public:
   income_form(wxWindow* parent, std::shared_ptr<transaction> transaction);
-  void save() override; //gets all values from each control
+  void save() override;
 
 private:
   wxSizer* _main_sizer;
