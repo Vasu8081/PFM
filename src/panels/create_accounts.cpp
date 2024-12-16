@@ -16,6 +16,9 @@ create_accounts_panel::create_accounts_panel(wxWindow* parent)
     add_chit_account_page();
     add_borrow_give_account_page();
     add_asset_account_page();
+    auto form = new transaction_form(_notebook, std::make_shared<transaction>());
+    _notebook->AddPage(form, "Transaction");
+    _form.push_back(form);
 
     auto* button_sizer = new wxBoxSizer(wxHORIZONTAL);
     auto* ok_button = new wxButton(this, wxID_OK, "Save");

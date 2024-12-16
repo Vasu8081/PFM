@@ -13,6 +13,7 @@ public:
                  int term_in_months);
 
     // Getters
+    std::string account_name() const override{ return _loan_name; }
     std::string loan_name() const;
     std::string loan_account_number() const;
     double principal_amount() const;

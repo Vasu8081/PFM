@@ -13,6 +13,7 @@ public:
                         double balance_due, unsigned int statement_day, unsigned int billing_date);
 
     // Getters
+    std::string account_name() const override{ return _card_name; }
     std::string card_name() const;
     std::string card_number() const;
     std::string expiry_date() const;

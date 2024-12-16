@@ -19,6 +19,7 @@ public:
     std::string id() const override;
     std::string user_id() const;
     enums::account_type account_type() const;
+    virtual std::string account_name() const = 0;
 
     // Setters
     void id(std::string id) override;

@@ -13,6 +13,7 @@ public:
                   std::string purchase_date = "");
 
     // Getters
+    std::string account_name() const override { return _asset_name; }
     std::string asset_name() const;
     std::string asset_type() const;
     double cost_of_ownership() const;

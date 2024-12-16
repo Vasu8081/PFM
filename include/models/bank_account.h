@@ -13,6 +13,7 @@ public:
                  double hold_amount = 0, std::optional<std::string> ifsc_code = std::nullopt);
 
     // Getters
+    std::string account_name() const override { return _bank_name; }
     std::string account_number() const;
     std::string bank_name() const;
     double balance() const;
@@ -20,6 +21,7 @@ public:
     std::optional<std::string> ifsc_code() const;
 
     // Setters
+
     void account_number(const std::string& account_number);
     void bank_name(const std::string& bank_name);
     void balance(double balance);

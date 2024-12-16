@@ -28,8 +28,8 @@ void home::add_dashboard_page() {
 }
 
 void home::add_transactions_page() {
-    auto dash = new wxPanel(_notebook, wxID_ANY);
-    _notebook->AddPage(dash, "Transactions");
+    _transactions = new transactions_panel(_notebook);
+    _notebook->AddPage(_transactions, "Transactions");
 }
 
 void home::add_categories_view_page() {

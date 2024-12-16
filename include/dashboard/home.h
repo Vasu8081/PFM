@@ -20,6 +20,7 @@ private:
     wxSizer* _main_sizer;
     create_accounts_panel* _create_accounts;
     dashboard_panel* _dashboard;
+    transactions_panel* _transactions;
     wxNotebook* _notebook;
     database db;
 };

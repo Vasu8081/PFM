@@ -9,5 +9,6 @@ add_library(forms STATIC
         loan_account_form.cpp
         transaction_form.cpp
         user_form.cpp
+        income_form.cpp
 )
 target_include_directories(forms PUBLIC .)

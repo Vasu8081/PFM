@@ -13,6 +13,7 @@ public:
                      std::optional<std::string> last_added_date = std::nullopt);
 
     // Getters
+    std::string account_name() const override{ return _category_name; }
     std::string category_name() const;
     std::string parent_account_id() const;
     double monthly_budget() const;

@@ -13,6 +13,7 @@ public:
                  std::optional<std::string> last_added_date = std::nullopt);
 
     // Getters
+    std::string account_name() const override{ return _chit_name; }
     std::string chit_name() const;
     double monthly_budget() const;
     double accumulated_balance() const;

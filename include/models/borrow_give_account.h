@@ -12,6 +12,7 @@ public:
                         std::optional<std::string> due_date = std::nullopt);
 
     // Getters
+    std::string account_name() const override{ return _person_name; }
     std::string person_name() const;
     double balance_due() const;
     std::optional<std::string> due_date() const;
