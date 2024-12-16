@@ -1,6 +1,6 @@
-#include <panels/chit_accounts_panel.h>
+#include <forms/forms_include.h>
 
-chit_accounts_panel::chit_accounts_panel(wxWindow *parent, std::shared_ptr<account> account)
+chit_account_form::chit_account_form(wxWindow *parent, std::shared_ptr<account> account)
 : wxPanel(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize)
 {
     _account = std::dynamic_pointer_cast<chit_account>(account);
@@ -46,7 +46,7 @@ chit_accounts_panel::chit_accounts_panel(wxWindow *parent, std::shared_ptr<accou
     Layout();
 }
 
-void chit_accounts_panel::save() {
+void chit_account_form::save() {
     _account->account_type(enums::CHIT_ACCOUNT);
     _account->chit_name(std::string(_chit_name_ctrl->GetValue().mb_str()));
     _account->monthly_budget(std::stod(std::string(_monthly_budget_ctrl->GetValue().mb_str())));

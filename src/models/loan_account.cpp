@@ -102,12 +102,15 @@ void loan_account::set(const std::unordered_map<std::string, std::string>& field
 }
 
 void loan_account::save() {
-    account::save();
     auto fields = get();
     if (id().empty()) {
+        account::save();
+        fields["id"] = id();
         db->insert(fields, table_name());
     }
-    db->update(fields, table_name());
+    else {
+        db->update(fields, table_name());
+    }
     set(fields);
 }
 

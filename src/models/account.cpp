@@ -58,7 +58,9 @@ void account::save() {
     if (id().empty()) {
         db->insert(fields, account::table_name());
     }
-    db->update(fields, account::table_name());
+    else {
+        db->update(fields, account::table_name());
+    }
     account::set(fields);
 }
 

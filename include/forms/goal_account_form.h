@@ -3,12 +3,13 @@
 #include <wx/wx.h>
 #include <wx/panel.h>
 #include <models/goal_account.h>
+#include <forms/models_form.h>
 
-class goal_accounts_panel : public wxPanel {
+class goal_account_form final : public wxPanel, public model_form  {
 public:
-    goal_accounts_panel(wxWindow *parent, std::shared_ptr<account> account);
+    goal_account_form(wxWindow *parent, std::shared_ptr<account> account);
 
-    void save();
+    void save() override;
 
 private:
     std::shared_ptr<goal_account> _account;

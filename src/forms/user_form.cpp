@@ -1,6 +1,6 @@
-#include <panels/users_panel.h>
+#include <forms/forms_include.h>
 
-user_panel::user_panel(wxWindow* parent, std::shared_ptr<user> usr)
+user_form::user_form(wxWindow* parent, std::shared_ptr<user> usr)
     : wxPanel(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize)
 {
     _usr = usr;
@@ -40,7 +40,7 @@ user_panel::user_panel(wxWindow* parent, std::shared_ptr<user> usr)
     Layout();
 }
 
-void user_panel::save()
+void user_form::save()
 {
     _usr->id(std::string(_id_ctrl->GetValue().mb_str()));
     _usr->name(std::string(_name_ctrl->GetValue().mb_str()));

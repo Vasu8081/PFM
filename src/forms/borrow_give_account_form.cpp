@@ -1,6 +1,6 @@
-#include <panels/borrow_give_accounts_panel.h>
+#include <forms/forms_include.h>
 
-borrow_give_accounts_panel::borrow_give_accounts_panel(wxWindow *parent, std::shared_ptr<account> account)
+borrow_give_account_form::borrow_give_account_form(wxWindow *parent, std::shared_ptr<account> account)
 : wxPanel(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize)
 {
     _account = std::dynamic_pointer_cast<borrow_give_account>(account);
@@ -28,7 +28,7 @@ borrow_give_accounts_panel::borrow_give_accounts_panel(wxWindow *parent, std::sh
     Layout();
 }
 
-void borrow_give_accounts_panel::save() {
+void borrow_give_account_form::save() {
     _account->account_type(enums::BORROW_GIVE_ACCOUNT);
     _account->person_name(std::string(_person_name_ctrl->GetValue().mb_str()));
     _account->balance_due(std::stod(std::string(_balance_due_ctrl->GetValue().mb_str())));

@@ -3,12 +3,13 @@
 #include <wx/wx.h>
 #include <wx/panel.h>
 #include <models/credit_card_account.h>
+#include <forms/models_form.h>
 
-class credit_card_accounts_panel : public wxPanel {
+class credit_card_account_form final : public wxPanel, public model_form {
 public:
-    credit_card_accounts_panel(wxWindow *parent, std::shared_ptr<account> account);
+    credit_card_account_form(wxWindow *parent, std::shared_ptr<account> account);
 
-    void save();
+    void save() override;
 
 private:
     std::shared_ptr<credit_card_account> _account;

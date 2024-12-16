@@ -3,12 +3,13 @@
 #include <wx/wx.h>
 #include <wx/panel.h>
 #include <models/chit_account.h>
+#include <forms/models_form.h>
 
-class chit_accounts_panel : public wxPanel {
+class chit_account_form final : public wxPanel, public model_form {
 public:
-    chit_accounts_panel(wxWindow *parent, std::shared_ptr<account> account);
+    chit_account_form(wxWindow *parent, std::shared_ptr<account> account);
 
-    void save();
+    void save() override;
 
 private:
     std::shared_ptr<chit_account> _account;

@@ -1,5 +1,6 @@
 add_subdirectory(dashboard)
 add_subdirectory(database)
+add_subdirectory(forms)
 add_subdirectory(panels)
 add_subdirectory(models)
 add_subdirectory(utils)

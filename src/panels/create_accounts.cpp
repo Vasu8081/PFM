@@ -30,64 +30,54 @@ create_accounts_panel::create_accounts_panel(wxWindow* parent)
 }
 
 void create_accounts_panel::add_bank_account_page(){
-    _bank_accounts_panel = new bank_accounts_panel(_notebook, std::make_shared<bank_account>());
-    _notebook->AddPage(_bank_accounts_panel, "Bank Account");
+    auto form = new bank_account_form(_notebook, std::make_shared<bank_account>());
+    _notebook->AddPage(form, "Bank Account");
+    _form.push_back(form);
 }
 
 void create_accounts_panel::add_credit_card_account_page(){
-    _credit_card_account_panel = new credit_card_accounts_panel(_notebook, std::make_shared<credit_card_account>());
-    _notebook->AddPage(_credit_card_account_panel, "Credit Card Account");
+    auto form = new credit_card_account_form(_notebook, std::make_shared<credit_card_account>());
+    _notebook->AddPage(form, "Credit Card Account");
+    _form.push_back(form);
 }
 
 void create_accounts_panel::add_loan_account_page(){
-    _loan_account_panel = new loan_accounts_panel(_notebook, std::make_shared<loan_account>());
-    _notebook->AddPage(_loan_account_panel, "Loan Account");
+    auto form = new loan_account_form(_notebook, std::make_shared<loan_account>());
+    _notebook->AddPage(form, "Loan Account");
+    _form.push_back(form);
 }
 
 void create_accounts_panel::add_category_account_page(){
-    _category_account_panel = new category_accounts_panel(_notebook, std::make_shared<category_account>());
-    _notebook->AddPage(_category_account_panel, "Category Account");
+    auto form = new category_account_form(_notebook, std::make_shared<category_account>());
+    _notebook->AddPage(form, "Category Account");
+    _form.push_back(form);
 }
 
 void create_accounts_panel::add_goal_account_page(){
-    _goal_account_panel = new goal_accounts_panel(_notebook, std::make_shared<goal_account>());
-    _notebook->AddPage(_goal_account_panel, "Goal Account");
+    auto form = new goal_account_form(_notebook, std::make_shared<goal_account>());
+    _notebook->AddPage(form, "Goal Account");
+    _form.push_back(form);
 }
 
 void create_accounts_panel::add_chit_account_page(){
-    _chit_account_panel = new chit_accounts_panel(_notebook, std::make_shared<chit_account>());
-    _notebook->AddPage(_chit_account_panel, "Chit Account");
+    auto form = new chit_account_form(_notebook, std::make_shared<chit_account>());
+    _notebook->AddPage(form, "Chit Account");
+    _form.push_back(form);
 }
 
 void create_accounts_panel::add_borrow_give_account_page(){
-    _borrow_give_account_panel = new borrow_give_accounts_panel(_notebook, std::make_shared<borrow_give_account>());
-    _notebook->AddPage(_borrow_give_account_panel, "Borrow/Give Account");
+    auto form = new borrow_give_account_form(_notebook, std::make_shared<borrow_give_account>());
+    _notebook->AddPage(form, "Borrow/Give Account");
+    _form.push_back(form);
 }
 
 void create_accounts_panel::add_asset_account_page(){
-    _asset_account_panel = new asset_accounts_panel(_notebook, std::make_shared<asset_account>());
-    _notebook->AddPage(_asset_account_panel, "Asset Account");
+    auto form = new asset_account_form(_notebook, std::make_shared<asset_account>());
+    _notebook->AddPage(form, "Asset Account");
+    _form.push_back(form);
 }
 
 void create_accounts_panel::on_save(wxCommandEvent& event){
     int selected_page = _notebook->GetSelection();
-    wxString selected_label = _notebook->GetPageText(selected_page);
-
-    if (selected_label == "Bank Account"){
-        _bank_accounts_panel->save();
-    } else if (selected_label == "Credit Card Account") {
-        _credit_card_account_panel->save();
-    } else if (selected_label == "Loan Account") {
-        _loan_account_panel->save();
-    } else if (selected_label == "Category Account") {
-        _category_account_panel->save();
-    } else if (selected_label == "Goal Account") {
-        _goal_account_panel->save();
-    } else if (selected_label == "Chit Account") {
-        _chit_account_panel->save();
-    } else if (selected_label == "Borrow/Give Account") {
-        _borrow_give_account_panel->save();
-    } else if (selected_label == "Asset Account") {
-        _asset_account_panel->save();
-    }
+    _form[selected_page]->save();
 }

@@ -1,6 +1,6 @@
-#include <panels/loan_accounts_panel.h>
+#include <forms/forms_include.h>
 
-loan_accounts_panel::loan_accounts_panel(wxWindow *parent, std::shared_ptr<account> account)
+loan_account_form::loan_account_form(wxWindow *parent, std::shared_ptr<account> account)
 : wxPanel(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize)
 {
     _account = std::dynamic_pointer_cast<loan_account>(account);
@@ -52,7 +52,7 @@ loan_accounts_panel::loan_accounts_panel(wxWindow *parent, std::shared_ptr<accou
     Layout();
 }
 
-void loan_accounts_panel::save() {
+void loan_account_form::save() {
     _account->account_type(enums::LOAN_ACCOUNT);
     _account->loan_name(std::string(_loan_name_ctrl->GetValue().mb_str()));
     _account->loan_account_number(std::string(_loan_account_number_ctrl->GetValue().mb_str()));

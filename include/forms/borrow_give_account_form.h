@@ -3,12 +3,13 @@
 #include <wx/wx.h>
 #include <wx/panel.h>
 #include <models/borrow_give_account.h>
+#include <forms/models_form.h>
 
-class borrow_give_accounts_panel : public wxPanel {
+class borrow_give_account_form final : public wxPanel, public model_form {
 public:
-    borrow_give_accounts_panel(wxWindow *parent, std::shared_ptr<account> account);
+    borrow_give_account_form(wxWindow *parent, std::shared_ptr<account> account);
 
-    void save();
+    void save() override;
 
 private:
     std::shared_ptr<borrow_give_account> _account;

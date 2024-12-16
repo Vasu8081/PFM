@@ -3,12 +3,13 @@
 #include <wx/wx.h>
 #include <wx/panel.h>
 #include <models/user.h>
+#include <forms/models_form.h>
 
-class user_panel : public wxPanel {
+class user_form final : public wxPanel, public model_form {
 public:
-    user_panel(wxWindow* parent, std::shared_ptr<user> usr);
+    user_form(wxWindow* parent, std::shared_ptr<user> usr);
 
-    void save();
+    void save() override;
 
 private:
     std::shared_ptr<user> _usr;

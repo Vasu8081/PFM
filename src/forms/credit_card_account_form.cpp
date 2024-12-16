@@ -1,6 +1,6 @@
-#include <panels/credit_card_accounts_panel.h>
+#include <forms/forms_include.h>
 
-credit_card_accounts_panel::credit_card_accounts_panel(wxWindow *parent, std::shared_ptr<account> account)
+credit_card_account_form::credit_card_account_form(wxWindow *parent, std::shared_ptr<account> account)
 : wxPanel(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize)
 {
     _account = std::dynamic_pointer_cast<credit_card_account>(account);
@@ -58,7 +58,7 @@ credit_card_accounts_panel::credit_card_accounts_panel(wxWindow *parent, std::sh
     Layout();
 }
 
-void credit_card_accounts_panel::save() {
+void credit_card_account_form::save() {
     _account->account_type(enums::CREDIT_CARD_ACCOUNT);
     _account->card_name(std::string(_card_name_ctrl->GetValue().mb_str()));
     _account->card_number(std::string(_card_number_ctrl->GetValue().mb_str()));

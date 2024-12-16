@@ -1,6 +1,6 @@
-#include <panels/transactions_panel.h>
+#include <forms/forms_include.h>
 
-transaction_panel::transaction_panel(wxWindow* parent, std::shared_ptr<transaction> txn)
+transaction_form::transaction_form(wxWindow* parent, std::shared_ptr<transaction> txn)
     : wxPanel(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize)
 {
     _txn = txn;
@@ -64,7 +64,7 @@ transaction_panel::transaction_panel(wxWindow* parent, std::shared_ptr<transacti
     Layout();
 }
 
-void transaction_panel::save()
+void transaction_form::save()
 {
     _txn->description(std::string(_description_ctrl->GetValue().mb_str()));
     _txn->amount(std::stod(std::string(_amount_ctrl->GetValue().mb_str())));

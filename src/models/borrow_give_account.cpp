@@ -57,9 +57,15 @@ void borrow_give_account::set(const std::unordered_map<std::string, std::string>
 }
 
 void borrow_give_account::save() {
-    account::save();
     auto fields = get();
-    db->insert(fields, table_name());
+    if (id().empty()) {
+        account::save();
+        fields["id"] = id();
+        db->insert(fields, table_name());
+    }
+    else {
+        db->update(fields, table_name());
+    }
     set(fields);
 }
 

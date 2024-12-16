@@ -2,7 +2,7 @@
 
 #include <string>
 #include <unordered_map>
-#include "enums.h"
+#include <enums.h>
 #include <database/entity.h>
 #include <config.h>
 

@@ -3,12 +3,13 @@
 #include <wx/wx.h>
 #include <wx/panel.h>
 #include <models/asset_account.h>
+#include <forms/models_form.h>
 
-class asset_accounts_panel : public wxPanel {
+class asset_account_form final : public wxPanel, public model_form {
 public:
-    asset_accounts_panel(wxWindow *parent, std::shared_ptr<account> account);
+    asset_account_form(wxWindow *parent, std::shared_ptr<account> account);
 
-    void save();
+    void save() override;
 
 private:
     std::shared_ptr<asset_account> _account;

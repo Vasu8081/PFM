@@ -1,6 +1,6 @@
-#include <panels/goal_accounts_panel.h>
+#include <forms/forms_include.h>
 
-goal_accounts_panel::goal_accounts_panel(wxWindow *parent, std::shared_ptr<account> account)
+goal_account_form::goal_account_form(wxWindow *parent, std::shared_ptr<account> account)
 : wxPanel(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize)
 {
     _account = std::dynamic_pointer_cast<goal_account>(account);
@@ -52,7 +52,7 @@ goal_accounts_panel::goal_accounts_panel(wxWindow *parent, std::shared_ptr<accou
     Layout();
 }
 
-void goal_accounts_panel::save() {
+void goal_account_form::save() {
     _account->account_type(enums::GOAL_ACCOUNT);
     _account->goal_name(std::string(_goal_name_ctrl->GetValue().mb_str()));
     _account->parent_account_id(std::string(_parent_account_id_ctrl->GetValue().mb_str()));

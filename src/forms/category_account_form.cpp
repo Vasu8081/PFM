@@ -1,6 +1,6 @@
-#include <panels/category_accounts_panel.h>
+#include <forms/forms_include.h>
 
-category_accounts_panel::category_accounts_panel(wxWindow *parent, std::shared_ptr<account> account)
+category_account_form::category_account_form(wxWindow *parent, std::shared_ptr<account> account)
 : wxPanel(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize)
 {
     _account = std::dynamic_pointer_cast<category_account>(account);
@@ -40,7 +40,7 @@ category_accounts_panel::category_accounts_panel(wxWindow *parent, std::shared_p
     Layout();
 }
 
-void category_accounts_panel::save() {
+void category_account_form::save() {
     _account->account_type(enums::CATEGORY_ACCOUNT);
     _account->category_name(std::string(_category_name_ctrl->GetValue().mb_str()));
     _account->parent_account_id(std::string(_parent_account_id_ctrl->GetValue().mb_str()));
