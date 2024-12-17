@@ -1,5 +1,7 @@
 #pragma once
 #include <iostream>
+#include <typeinfo>
+#include <cxxabi.h>
 
 class account;
 
@@ -33,3 +35,5 @@ std::shared_ptr<account> get_account_pointer(std::string table_name);
 std::string account_t(enums::account_type type);
 
 enums::account_type account_t(std::string type);
+
+std::string demangle(const char* mangled_name);

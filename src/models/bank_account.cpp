@@ -100,6 +100,10 @@ void bank_account::load() {
 }
 
 void bank_account::print() const {
+    std::cout << details() << std::endl;
+}
+
+std::string bank_account::details() const {
     std::stringstream text;
     text << "account_type: " << account_t(account_type()) << std::endl;
     text << "account id: " << id() << std::endl;
@@ -108,5 +112,5 @@ void bank_account::print() const {
     text << "balance: " << balance() << std::endl;
     text << "hold_amount: " << hold_amount() << std::endl;
     text << "IFSC code: " << _ifsc_code.value_or("NULL");
-    std::cout << text.str() << std::endl;
+    return text.str();
 }

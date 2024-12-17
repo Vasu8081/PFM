@@ -37,6 +37,7 @@ public:
     void save() override;
     void load() override;
     void print() const override;
+    std::string details() const override;
 
 private:
     std::string _id;

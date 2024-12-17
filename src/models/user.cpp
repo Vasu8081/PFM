@@ -67,11 +67,15 @@ void user::load() {
 }
 
 void user::print() const {
+    std::cout << details() << std::endl;
+}
+
+std::string user::details() const {
     std::stringstream ss;
     ss << "ID: " << _id << std::endl;
     ss << "Name: " << _name << std::endl;
     ss << "Email: " << _email << std::endl;
     ss << "Password: " << _password << std::endl;
     ss << "Mobile: " << (_mobile.has_value() ? std::to_string(_mobile.value()) : "NULL");
-    std::cout << ss.str() << std::endl;
+    return ss.str();
 }

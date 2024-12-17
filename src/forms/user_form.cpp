@@ -5,7 +5,34 @@ user_form::user_form(wxWindow* parent, std::shared_ptr<user> usr)
 {
     _usr = usr;
     _main_sizer = new wxBoxSizer(wxVERTICAL);
+    refresh();
+    SetSizer(_main_sizer);
+    Layout();
+}
 
+void user_form::save()
+{
+    _usr->id(std::string(_id_ctrl->GetValue().mb_str()));
+    _usr->name(std::string(_name_ctrl->GetValue().mb_str()));
+    _usr->email(std::string(_email_ctrl->GetValue().mb_str()));
+    _usr->password(std::string(_password_ctrl->GetValue().mb_str()));
+
+    std::optional<long> mobile = std::nullopt;
+    if (!_mobile_ctrl->GetValue().IsEmpty()) {
+        mobile = std::stol(std::string(_mobile_ctrl->GetValue().mb_str()));
+    }
+    _usr->mobile(mobile);
+    _usr->print();
+    _usr->save();
+    wxMessageBox(_usr->details(), "Saved successfully", wxOK | wxICON_INFORMATION);
+}
+
+void user_form::reset() {
+    refresh();
+}
+
+void user_form::refresh() {
+    _main_sizer->Clear(true);
     // ID
     auto* id_label = new wxStaticText(this, wxID_ANY, "ID:");
     _id_ctrl = new wxTextCtrl(this, wxID_ANY, _usr->id());
@@ -35,23 +62,6 @@ user_form::user_form(wxWindow* parent, std::shared_ptr<user> usr)
     _mobile_ctrl = new wxTextCtrl(this, wxID_ANY, _usr->mobile().has_value() ? std::to_string(_usr->mobile().value()) : "");
     _main_sizer->Add(mobile_label, 0, wxALL, 5);
     _main_sizer->Add(_mobile_ctrl, 0, wxEXPAND | wxALL, 5);
-
-    SetSizer(_main_sizer);
     Layout();
 }
 
-void user_form::save()
-{
-    _usr->id(std::string(_id_ctrl->GetValue().mb_str()));
-    _usr->name(std::string(_name_ctrl->GetValue().mb_str()));
-    _usr->email(std::string(_email_ctrl->GetValue().mb_str()));
-    _usr->password(std::string(_password_ctrl->GetValue().mb_str()));
-
-    std::optional<long> mobile = std::nullopt;
-    if (!_mobile_ctrl->GetValue().IsEmpty()) {
-        mobile = std::stol(std::string(_mobile_ctrl->GetValue().mb_str()));
-    }
-    _usr->mobile(mobile);
-    _usr->print();
-    _usr->save();
-}

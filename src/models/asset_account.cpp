@@ -109,6 +109,11 @@ void asset_account::load() {
 }
 
 void asset_account::print() const {
+    auto text = details();
+    std::cout << text << std::endl;
+}
+
+std::string asset_account::details() const {
     std::stringstream text;
     text << "account_type: " << account_t(account_type()) << std::endl;
     text << "account id: " << id() << std::endl;
@@ -118,5 +123,5 @@ void asset_account::print() const {
     text << "paid_amount: " << paid_amount() << std::endl;
     text << "current_market_value: " << current_market_value() << std::endl;
     text << "purchase_date: " << purchase_date();
-    std::cout << text.str() << std::endl;
+    return text.str();
 }

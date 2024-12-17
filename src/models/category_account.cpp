@@ -100,6 +100,10 @@ void category_account::load() {
 }
 
 void category_account::print() const {
+    std::cout << details() << std::endl;
+}
+
+std::string category_account::details() const {
     std::stringstream text;
     text << "account_type: " << account_t(account_type()) << std::endl;
     text << "account id: " << id() << std::endl;
@@ -108,5 +112,6 @@ void category_account::print() const {
     text << "monthly_budget: " << monthly_budget() << std::endl;
     text << "current_balance: " << current_balance() << std::endl;
     text << "last_added_date: " << _last_added_date.value_or("NULL");
-    std::cout << text.str() << std::endl;
+    return text.str();
 }
+

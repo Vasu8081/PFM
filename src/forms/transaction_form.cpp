@@ -42,4 +42,18 @@ void transaction_form::save()
 {
     int selected_page = _notebook->GetSelection();
     _forms[selected_page]->save();
+    global_config.transactions[_txn->id()] = _txn;
+    wxMessageBox(_txn->details(), "Saved successfully", wxOK | wxICON_INFORMATION);
+}
+
+void transaction_form::reset() {
+    for (int i = 0; i < _forms.size(); i++) {
+        _forms[i]->reset();
+    }
+}
+
+void transaction_form::refresh() {
+    for (int i = 0; i < _forms.size(); i++) {
+        _forms[i]->refresh();
+    }
 }

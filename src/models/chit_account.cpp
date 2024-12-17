@@ -110,6 +110,10 @@ void chit_account::load() {
 }
 
 void chit_account::print() const {
+    std::cout << details() << std::endl;
+}
+
+std::string chit_account::details() const {
     std::stringstream text;
     text << "account_type: " << account_t(account_type()) << std::endl;
     text << "account id: " << id() << std::endl;
@@ -119,5 +123,5 @@ void chit_account::print() const {
     text << "mature_amount: " << mature_amount() << std::endl;
     text << "mature_date: " << _mature_date.value_or("NULL") << std::endl;
     text << "last_added_date: " << _last_added_date.value_or("NULL");
-    std::cout << text.str() << std::endl;
+    return text.str();
 }

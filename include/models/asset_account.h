@@ -28,6 +28,8 @@ public:
     void paid_amount(double paid_amount);
     void current_market_value(double current_market_value);
     void purchase_date(const std::string& purchase_date);
+    void income(double amount) override { _paid_amount += amount; };
+    void expense(double amount) override { _paid_amount -= amount; };
 
     // DB specific methods
     std::string table_name() const override;
@@ -36,6 +38,7 @@ public:
     void save() override;
     void load() override;
     void print() const override;
+    std::string details() const override;
 
 private:
     std::string _asset_name;

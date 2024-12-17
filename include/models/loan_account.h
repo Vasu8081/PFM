@@ -30,6 +30,8 @@ public:
     void interest_rate_per_annum(double interest_rate_per_annum);
     void installment_start_date(const std::string& installment_start_date);
     void term_in_months(int term_in_months);
+    void income(double amount) override { _remaining_principal -= amount; };
+    void expense(double amount) override { _remaining_principal += amount; };
 
     // DB specific methods
     std::string table_name() const override;
@@ -38,6 +40,7 @@ public:
     void save() override;
     void load() override;
     void print() const override;
+    std::string details() const override;
 
 private:
     std::string _loan_name;

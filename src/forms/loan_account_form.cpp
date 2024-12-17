@@ -5,7 +5,38 @@ loan_account_form::loan_account_form(wxWindow *parent, std::shared_ptr<account> 
 {
     _account = std::dynamic_pointer_cast<loan_account>(account);
     _main_sizer = new wxBoxSizer(wxVERTICAL);
+    refresh();
+    SetSizer(_main_sizer);
+    Layout();
+}
 
+void loan_account_form::save() {
+    _account->account_type(enums::LOAN_ACCOUNT);
+    _account->loan_name(std::string(_loan_name_ctrl->GetValue().mb_str()));
+    _account->loan_account_number(std::string(_loan_account_number_ctrl->GetValue().mb_str()));
+    _account->principal_amount(std::stod(std::string(_principal_amount_ctrl->GetValue().mb_str())));
+    _account->remaining_principal(std::stod(std::string(_remaining_principal_ctrl->GetValue().mb_str())));
+    _account->interest_rate_per_annum(std::stod(std::string(_interest_rate_per_annum_ctrl->GetValue().mb_str())));
+    _account->installment_start_date(std::string(_installment_start_date_ctrl->GetValue().mb_str()));
+    _account->term_in_months(std::stoi(std::string(_term_in_months_ctrl->GetValue().mb_str())));
+    _account->print();
+    if (_account->id().empty()) {
+        _account->save();
+        global_config.accounts[_account->id()] = _account;
+        wxMessageBox(_account->details(), "Saved successfully", wxOK | wxICON_INFORMATION);
+    }
+    else {
+        _account->save();
+    }
+}
+
+void loan_account_form::reset() {
+    _account = std::make_shared<loan_account>();
+    refresh();
+}
+
+void loan_account_form::refresh() {
+    _main_sizer->Clear(true);
     // Loan Name
     auto* loan_name_label = new wxStaticText(this, wxID_ANY, "Loan Name:");
     _loan_name_ctrl = new wxTextCtrl(this, wxID_ANY, _account->loan_name());
@@ -47,26 +78,6 @@ loan_account_form::loan_account_form(wxWindow *parent, std::shared_ptr<account> 
     _term_in_months_ctrl = new wxTextCtrl(this, wxID_ANY, std::to_string(_account->term_in_months()));
     _main_sizer->Add(term_in_months_label, 0, wxALL, 5);
     _main_sizer->Add(_term_in_months_ctrl, 0, wxEXPAND | wxALL, 5);
-
-    SetSizer(_main_sizer);
     Layout();
 }
 
-void loan_account_form::save() {
-    _account->account_type(enums::LOAN_ACCOUNT);
-    _account->loan_name(std::string(_loan_name_ctrl->GetValue().mb_str()));
-    _account->loan_account_number(std::string(_loan_account_number_ctrl->GetValue().mb_str()));
-    _account->principal_amount(std::stod(std::string(_principal_amount_ctrl->GetValue().mb_str())));
-    _account->remaining_principal(std::stod(std::string(_remaining_principal_ctrl->GetValue().mb_str())));
-    _account->interest_rate_per_annum(std::stod(std::string(_interest_rate_per_annum_ctrl->GetValue().mb_str())));
-    _account->installment_start_date(std::string(_installment_start_date_ctrl->GetValue().mb_str()));
-    _account->term_in_months(std::stoi(std::string(_term_in_months_ctrl->GetValue().mb_str())));
-    _account->print();
-    if (_account->id().empty()) {
-        _account->save();
-        global_config.accounts[_account->id()] = _account;
-    }
-    else {
-        _account->save();
-    }
-}

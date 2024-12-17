@@ -5,6 +5,37 @@ bank_account_form::bank_account_form(wxWindow *parent, std::shared_ptr<account> 
 {
     _account = std::dynamic_pointer_cast<bank_account>(account);
     _main_sizer = new wxBoxSizer(wxVERTICAL);
+    refresh();
+    SetSizer(_main_sizer);
+    Layout();
+}
+
+void bank_account_form::save() {
+    _account->account_type(enums::BANK_ACCOUNT);
+    _account->account_number(std::string(_account_number_ctrl->GetValue().mb_str()));
+    _account->bank_name(std::string(_bank_name_ctrl->GetValue().mb_str()));
+    _account->balance(std::stod(std::string(_balance_ctrl->GetValue().mb_str())));
+    _account->hold_amount(std::stod(std::string(_hold_amount_ctrl->GetValue().mb_str())));
+    std::string ifsc_code = std::string(_ifsc_code_ctrl->GetValue().mb_str());
+    _account->ifsc_code(ifsc_code.empty() ? std::nullopt : std::make_optional(ifsc_code));
+    _account->print();
+    if (_account->id().empty()) {
+        _account->save();
+        global_config.accounts[_account->id()] = _account;
+        wxMessageBox(_account->details(), "Saved successfully", wxOK | wxICON_INFORMATION);
+    }
+    else {
+        _account->save();
+    }
+}
+
+void bank_account_form::reset() {
+    _account = std::make_shared<bank_account>();
+    refresh();
+}
+
+void bank_account_form::refresh() {
+    _main_sizer->Clear(true);
 
     // Bank Name
     auto* bank_name_label = new wxStaticText(this, wxID_ANY, "Bank Name:");
@@ -35,25 +66,5 @@ bank_account_form::bank_account_form(wxWindow *parent, std::shared_ptr<account> 
     _ifsc_code_ctrl = new wxTextCtrl(this, wxID_ANY, _account->ifsc_code().value_or(""));
     _main_sizer->Add(ifsc_code_label, 0, wxALL, 5);
     _main_sizer->Add(_ifsc_code_ctrl, 0, wxEXPAND | wxALL, 5);
-
-    SetSizer(_main_sizer);
     Layout();
-}
-
-void bank_account_form::save() {
-    _account->account_type(enums::BANK_ACCOUNT);
-    _account->account_number(std::string(_account_number_ctrl->GetValue().mb_str()));
-    _account->bank_name(std::string(_bank_name_ctrl->GetValue().mb_str()));
-    _account->balance(std::stod(std::string(_balance_ctrl->GetValue().mb_str())));
-    _account->hold_amount(std::stod(std::string(_hold_amount_ctrl->GetValue().mb_str())));
-    std::string ifsc_code = std::string(_ifsc_code_ctrl->GetValue().mb_str());
-    _account->ifsc_code(ifsc_code.empty() ? std::nullopt : std::make_optional(ifsc_code));
-    _account->print();
-    if (_account->id().empty()) {
-        _account->save();
-        global_config.accounts[_account->id()] = _account;
-    }
-    else {
-        _account->save();
-    }
 }

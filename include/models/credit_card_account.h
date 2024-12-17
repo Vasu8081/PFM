@@ -32,6 +32,8 @@ public:
     void balance_due(double balance_due);
     void statement_day(unsigned int statement_day);
     void billing_date(unsigned int billing_date);
+    void income(double amount) override { _balance_due -= amount; };
+    void expense(double amount) override { _balance_due += amount; };
 
     // DB specific methods
     std::string table_name() const override;
@@ -40,6 +42,7 @@ public:
     void save() override;
     void load() override;
     void print() const override;
+    std::string details() const override;
 
 private:
     std::string _card_name;

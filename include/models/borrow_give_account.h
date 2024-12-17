@@ -21,6 +21,8 @@ public:
     void person_name(const std::string& person_name);
     void balance_due(double balance_due);
     void due_date(std::optional<std::string> due_date);
+    void income(double amount) override { _balance_due -= amount; };
+    void expense(double amount) override { _balance_due += amount; };
 
     // DB specific methods
     std::string table_name() const override;
@@ -29,6 +31,7 @@ public:
     void save() override;
     void load() override;
     void print() const override;
+    std::string details() const override;
 
 private:
     std::string _person_name;

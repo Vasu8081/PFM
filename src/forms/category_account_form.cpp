@@ -5,7 +5,37 @@ category_account_form::category_account_form(wxWindow *parent, std::shared_ptr<a
 {
     _account = std::dynamic_pointer_cast<category_account>(account);
     _main_sizer = new wxBoxSizer(wxVERTICAL);
+    refresh();
+    SetSizer(_main_sizer);
+    Layout();
+}
 
+void category_account_form::save() {
+    _account->account_type(enums::CATEGORY_ACCOUNT);
+    _account->category_name(std::string(_category_name_ctrl->GetValue().mb_str()));
+    _account->parent_account_id(std::string(_parent_account_id_ctrl->GetValue().mb_str()));
+    _account->monthly_budget(std::stod(std::string(_monthly_budget_ctrl->GetValue().mb_str())));
+    _account->current_balance(std::stod(std::string(_current_balance_ctrl->GetValue().mb_str())));
+    std::string last_added_date = std::string(_last_added_date_ctrl->GetValue().mb_str());
+    _account->last_added_date(last_added_date.empty() ? std::nullopt : std::make_optional(last_added_date));
+    _account->print();
+    if (_account->id().empty()) {
+        _account->save();
+        global_config.accounts[_account->id()] = _account;
+        wxMessageBox(_account->details(), "Saved successfully", wxOK | wxICON_INFORMATION);
+    }
+    else {
+        _account->save();
+    }
+}
+
+void category_account_form::reset() {
+    _account = std::make_shared<category_account>();
+    refresh();
+}
+
+void category_account_form::refresh() {
+    _main_sizer->Clear(true);
     // Category Name
     auto* category_name_label = new wxStaticText(this, wxID_ANY, "Category Name:");
     _category_name_ctrl = new wxTextCtrl(this, wxID_ANY, _account->category_name());
@@ -35,25 +65,5 @@ category_account_form::category_account_form(wxWindow *parent, std::shared_ptr<a
     _last_added_date_ctrl = new wxTextCtrl(this, wxID_ANY, _account->last_added_date().value_or(""));
     _main_sizer->Add(last_added_date_label, 0, wxALL, 5);
     _main_sizer->Add(_last_added_date_ctrl, 0, wxEXPAND | wxALL, 5);
-
-    SetSizer(_main_sizer);
     Layout();
-}
-
-void category_account_form::save() {
-    _account->account_type(enums::CATEGORY_ACCOUNT);
-    _account->category_name(std::string(_category_name_ctrl->GetValue().mb_str()));
-    _account->parent_account_id(std::string(_parent_account_id_ctrl->GetValue().mb_str()));
-    _account->monthly_budget(std::stod(std::string(_monthly_budget_ctrl->GetValue().mb_str())));
-    _account->current_balance(std::stod(std::string(_current_balance_ctrl->GetValue().mb_str())));
-    std::string last_added_date = std::string(_last_added_date_ctrl->GetValue().mb_str());
-    _account->last_added_date(last_added_date.empty() ? std::nullopt : std::make_optional(last_added_date));
-    _account->print();
-    if (_account->id().empty()) {
-        _account->save();
-        global_config.accounts[_account->id()] = _account;
-    }
-    else {
-        _account->save();
-    }
 }

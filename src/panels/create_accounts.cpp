@@ -83,4 +83,8 @@ void create_accounts_panel::add_asset_account_page(){
 void create_accounts_panel::on_save(wxCommandEvent& event){
     int selected_page = _notebook->GetSelection();
     _form[selected_page]->save();
+    _form[selected_page]->reset();
+    for (int i = 0; i < _form.size(); i++) {
+        _form[i]->refresh();
+    }
 }

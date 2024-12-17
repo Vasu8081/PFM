@@ -1,11 +1,68 @@
 #include <forms/income_form.h>
 #include <models/account.h>
+#include <models/bank_account.h>
+#include <models/credit_card_account.h>
+#include <panels/transactions_panel.h>
 
 income_form::income_form(wxWindow* parent, std::shared_ptr<transaction> transaction)
     : wxPanel(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize), _transaction(transaction)
 {
     _main_sizer = new wxBoxSizer(wxVERTICAL);
 
+    refresh();
+    SetSizer(_main_sizer);
+    Layout();
+}
+
+void income_form::save() {
+    int to_account_selection = _to_account_ctrl->GetSelection();
+    int category_account_selection = _category_account_ctrl->GetSelection();
+
+    wxString to_account_id = (to_account_selection != wxNOT_FOUND && _to_account_ctrl->GetClientData(to_account_selection))
+        ? *static_cast<wxString*>(_to_account_ctrl->GetClientData(to_account_selection))
+        : "";
+    wxString category_account_id = (category_account_selection != wxNOT_FOUND && _category_account_ctrl->GetClientData(category_account_selection))
+        ? *static_cast<wxString*>(_category_account_ctrl->GetClientData(category_account_selection))
+        : "";
+
+    wxString description = _description_ctrl->GetValue();
+    wxString amount_str = _amount_ctrl->GetValue();
+    wxDateTime date = _date_ctrl->GetValue();
+    wxString file_path = _file_ctrl->GetPath();
+
+    double amount = 0.0;
+    if (!amount_str.ToDouble(&amount)) {
+        wxMessageBox("Invalid amount entered.", "Error", wxOK | wxICON_ERROR);
+        return;
+    }
+
+    if (to_account_id.IsEmpty() || category_account_id.IsEmpty() || amount <= 0) {
+        wxMessageBox("Please fill all required fields with valid data.", "Error", wxOK | wxICON_ERROR);
+        return;
+    }
+
+    _transaction->transaction_type("INCOME");
+    _transaction->to_account_id(to_account_id.ToStdString());
+    global_config.accounts[to_account_id.ToStdString()]->income(amount);
+    global_config.accounts[to_account_id.ToStdString()]->save();
+    _transaction->category_account_id(category_account_id.ToStdString());
+    global_config.accounts[category_account_id.ToStdString()]->income(amount);
+    global_config.accounts[category_account_id.ToStdString()]->save();
+    _transaction->description(description.ToStdString());
+    _transaction->amount(amount);
+    _transaction->date(date.FormatISODate().ToStdString());
+    _transaction->proof_document(file_path.ToStdString());
+    _transaction->print();
+    _transaction->save();
+}
+
+void income_form::reset() {
+    _transaction = std::make_shared<transaction>();
+    refresh();
+}
+
+void income_form::refresh() {
+    _main_sizer->Clear(true);
     auto to_account_label = new wxStaticText(this, wxID_ANY, "To Account:");
     _to_account_ctrl = new wxComboBox(this, wxID_ANY);
     _main_sizer->Add(to_account_label, 0, wxALL | wxEXPAND, 5);
@@ -46,45 +103,5 @@ income_form::income_form(wxWindow* parent, std::shared_ptr<transaction> transact
     _file_ctrl = new wxFilePickerCtrl(this, wxID_ANY);
     _main_sizer->Add(file_label, 0, wxALL | wxEXPAND, 5);
     _main_sizer->Add(_file_ctrl, 0, wxALL | wxEXPAND, 5);
-
-    SetSizer(_main_sizer);
     Layout();
-}
-
-void income_form::save() {
-    int to_account_selection = _to_account_ctrl->GetSelection();
-    int category_account_selection = _category_account_ctrl->GetSelection();
-
-    wxString to_account_id = (to_account_selection != wxNOT_FOUND && _to_account_ctrl->GetClientData(to_account_selection))
-        ? *static_cast<wxString*>(_to_account_ctrl->GetClientData(to_account_selection))
-        : "";
-    wxString category_account_id = (category_account_selection != wxNOT_FOUND && _category_account_ctrl->GetClientData(category_account_selection))
-        ? *static_cast<wxString*>(_category_account_ctrl->GetClientData(category_account_selection))
-        : "";
-
-    wxString description = _description_ctrl->GetValue();
-    wxString amount_str = _amount_ctrl->GetValue();
-    wxDateTime date = _date_ctrl->GetValue();
-    wxString file_path = _file_ctrl->GetPath();
-
-    double amount = 0.0;
-    if (!amount_str.ToDouble(&amount)) {
-        wxMessageBox("Invalid amount entered.", "Error", wxOK | wxICON_ERROR);
-        return;
-    }
-
-    if (to_account_id.IsEmpty() || category_account_id.IsEmpty() || amount <= 0) {
-        wxMessageBox("Please fill all required fields with valid data.", "Error", wxOK | wxICON_ERROR);
-        return;
-    }
-
-    _transaction->transaction_type("INCOME");
-    _transaction->to_account_id(to_account_id.ToStdString());
-    _transaction->category_account_id(category_account_id.ToStdString());
-    _transaction->description(description.ToStdString());
-    _transaction->amount(amount);
-    _transaction->date(date.FormatISODate().ToStdString());
-    _transaction->proof_document(file_path.ToStdString());
-    _transaction->print();
-    _transaction->save();
 }

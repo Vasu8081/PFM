@@ -123,6 +123,10 @@ void loan_account::load() {
 
 
 void loan_account::print() const {
+    std::cout << details() << std::endl;
+}
+
+std::string loan_account::details() const {
     std::stringstream text;
     text << "account_type: " << account_t(account_type()) << std::endl;
     text << "account id: " << id() << std::endl;
@@ -133,5 +137,5 @@ void loan_account::print() const {
     text << "interest_rate_per_annum: " << interest_rate_per_annum() << std::endl;
     text << "installment_start_date: " << installment_start_date() << std::endl;
     text << "term_in_months: " << term_in_months() << std::endl;
-    std::cout << text.str() << std::endl;
+    return text.str();
 }

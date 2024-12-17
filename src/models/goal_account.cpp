@@ -122,6 +122,10 @@ void goal_account::load() {
 }
 
 void goal_account::print() const {
+    std::cout << details() << std::endl;
+}
+
+std::string goal_account::details() const {
     std::stringstream text;
     text << "account_type: " << account_t(account_type()) << std::endl;
     text << "account id: " << id() << std::endl;
@@ -132,5 +136,5 @@ void goal_account::print() const {
     text << "target_amount: " << target_amount() << std::endl;
     text << "target_date: " << _target_date.value_or("NULL") << std::endl;
     text << "last_added_date: " << _last_added_date.value_or("NULL");
-    std::cout << text.str() << std::endl;
+    return text.str();
 }

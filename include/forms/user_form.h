@@ -10,6 +10,8 @@ public:
     user_form(wxWindow* parent, std::shared_ptr<user> usr);
 
     void save() override;
+    void reset() override;
+    void refresh() override;
 
 private:
     std::shared_ptr<user> _usr;

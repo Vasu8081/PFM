@@ -5,7 +5,42 @@ chit_account_form::chit_account_form(wxWindow *parent, std::shared_ptr<account> 
 {
     _account = std::dynamic_pointer_cast<chit_account>(account);
     _main_sizer = new wxBoxSizer(wxVERTICAL);
+    refresh();
+    SetSizer(_main_sizer);
+    Layout();
+}
 
+void chit_account_form::save() {
+    _account->account_type(enums::CHIT_ACCOUNT);
+    _account->chit_name(std::string(_chit_name_ctrl->GetValue().mb_str()));
+    _account->monthly_budget(std::stod(std::string(_monthly_budget_ctrl->GetValue().mb_str())));
+    _account->accumulated_balance(std::stod(std::string(_accumulated_balance_ctrl->GetValue().mb_str())));
+    _account->mature_amount(std::stod(std::string(_mature_amount_ctrl->GetValue().mb_str())));
+
+    std::string mature_date = std::string(_mature_date_ctrl->GetValue().mb_str());
+    _account->mature_date(mature_date.empty() ? std::nullopt : std::make_optional(mature_date));
+
+    std::string last_added_date = std::string(_last_added_date_ctrl->GetValue().mb_str());
+    _account->last_added_date(last_added_date.empty() ? std::nullopt : std::make_optional(last_added_date));
+
+    _account->print();
+    if (_account->id().empty()) {
+        _account->save();
+        global_config.accounts[_account->id()] = _account;
+        wxMessageBox(_account->details(), "Saved successfully", wxOK | wxICON_INFORMATION);
+    }
+    else {
+        _account->save();
+    }
+}
+
+void chit_account_form::reset() {
+    _account = std::make_shared<chit_account>();
+    refresh();
+}
+
+void chit_account_form::refresh() {
+    _main_sizer->Clear(true);
     // Chit Name
     auto* chit_name_label = new wxStaticText(this, wxID_ANY, "Chit Name:");
     _chit_name_ctrl = new wxTextCtrl(this, wxID_ANY, _account->chit_name());
@@ -41,30 +76,6 @@ chit_account_form::chit_account_form(wxWindow *parent, std::shared_ptr<account> 
     _last_added_date_ctrl = new wxTextCtrl(this, wxID_ANY, _account->last_added_date().value_or(""));
     _main_sizer->Add(last_added_date_label, 0, wxALL, 5);
     _main_sizer->Add(_last_added_date_ctrl, 0, wxEXPAND | wxALL, 5);
-
-    SetSizer(_main_sizer);
     Layout();
 }
 
-void chit_account_form::save() {
-    _account->account_type(enums::CHIT_ACCOUNT);
-    _account->chit_name(std::string(_chit_name_ctrl->GetValue().mb_str()));
-    _account->monthly_budget(std::stod(std::string(_monthly_budget_ctrl->GetValue().mb_str())));
-    _account->accumulated_balance(std::stod(std::string(_accumulated_balance_ctrl->GetValue().mb_str())));
-    _account->mature_amount(std::stod(std::string(_mature_amount_ctrl->GetValue().mb_str())));
-
-    std::string mature_date = std::string(_mature_date_ctrl->GetValue().mb_str());
-    _account->mature_date(mature_date.empty() ? std::nullopt : std::make_optional(mature_date));
-
-    std::string last_added_date = std::string(_last_added_date_ctrl->GetValue().mb_str());
-    _account->last_added_date(last_added_date.empty() ? std::nullopt : std::make_optional(last_added_date));
-
-    _account->print();
-    if (_account->id().empty()) {
-        _account->save();
-        global_config.accounts[_account->id()] = _account;
-    }
-    else {
-        _account->save();
-    }
-}

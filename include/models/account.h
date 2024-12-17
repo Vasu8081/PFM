@@ -25,6 +25,8 @@ public:
     void id(std::string id) override;
     void user_id(std::string user_id);
     void account_type(enums::account_type account_type);
+    virtual void income(double amount) = 0;
+    virtual void expense(double amount) = 0;
 
     // DB specific methods
     std::string table_name() const override;
@@ -33,6 +35,7 @@ public:
     void save() override;
     void load() override;
     void print() const override;
+    std::string details() const override;
 
 private:
     std::string _id;

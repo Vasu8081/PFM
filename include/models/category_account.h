@@ -26,6 +26,8 @@ public:
     void monthly_budget(double monthly_budget);
     void current_balance(double current_balance);
     void last_added_date(std::optional<std::string> last_added_date);
+    void income(double amount) override { _current_balance += amount; };
+    void expense(double amount) override { _current_balance -= amount; };
 
     // DB specific methods
     std::string table_name() const override;
@@ -34,6 +36,7 @@ public:
     void save() override;
     void load() override;
     void print() const override;
+    std::string details() const override;
 
 private:
     std::string _category_name;

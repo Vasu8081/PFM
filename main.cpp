@@ -21,6 +21,13 @@ bool PFM::OnInit() {
         u.set(r);
         u.print();
     }
+    if (u.id().empty()) {
+        u.email("vasudhanvarma@gmail.com");
+        u.mobile(6381851146);
+        u.name("Vasudhan Varma");
+        u.password("Vkandula");
+        u.save();
+    }
     global_config.user_id = u.id();
     auto dashboard = new home();
     dashboard->Show();

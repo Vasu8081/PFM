@@ -11,6 +11,8 @@ public:
     transaction_form(wxWindow* parent, std::shared_ptr<transaction> txn);
 
     void save() override;
+    void reset() override;
+    void refresh() override;
 
     void add_income_page();
     void add_expense_page();

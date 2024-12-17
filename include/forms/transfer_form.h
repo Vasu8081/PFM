@@ -10,6 +10,8 @@ class transfer_form : public wxPanel, public model_form {
 public:
     transfer_form(wxWindow* parent, std::shared_ptr<transaction> transaction);
     void save() override;
+    void reset() override;
+    void refresh() override;
 
 private:
     wxSizer* _main_sizer;

@@ -10,6 +10,8 @@ public:
   bank_account_form(wxWindow *parent, std::shared_ptr<account> account);
 
   void save() override;
+  void reset() override;
+  void refresh() override;
 
 private:
   std::shared_ptr<bank_account> _account;

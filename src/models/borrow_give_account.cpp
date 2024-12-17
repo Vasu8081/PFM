@@ -77,11 +77,16 @@ void borrow_give_account::load() {
 }
 
 void borrow_give_account::print() const {
+    std::cout << details() << std::endl;
+}
+
+std::string borrow_give_account::details() const {
     std::stringstream text;
     text << "account_type: " << account_t(account_type()) << std::endl;
     text << "account id: " << id() << std::endl;
     text << "person_name: " << person_name() << std::endl;
     text << "balance_due: " << balance_due() << std::endl;
     text << "due_date: " << _due_date.value_or("NULL");
-    std::cout << text.str() << std::endl;
+    return text.str();
 }
+

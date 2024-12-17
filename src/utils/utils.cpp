@@ -1,5 +1,6 @@
 #include <utils/utils.h>
 #include <enums.h>
+#include <models/asset_account.h>
 #include <models/bank_account.h>
 #include <models/borrow_give_account.h>
 #include <models/category_account.h>
@@ -90,4 +91,12 @@ std::shared_ptr<account> get_account_pointer(std::string table_name)
         return std::make_shared<chit_account>();
     }
     return nullptr;
+}
+
+std::string demangle(const char* mangled_name) {
+    int status = 0;
+    char* demangled_name = abi::__cxa_demangle(mangled_name, nullptr, nullptr, &status);
+    std::string result = (status == 0) ? demangled_name : mangled_name;
+    free(demangled_name);
+    return result;
 }

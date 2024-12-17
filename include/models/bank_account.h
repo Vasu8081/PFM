@@ -27,6 +27,8 @@ public:
     void balance(double balance);
     void hold_amount(double hold_amount);
     void ifsc_code(std::optional<std::string> ifsc_code);
+    void income(double amount) override { _balance += amount; };
+    void expense(double amount) override { _balance -= amount; };
 
     // DB specific methods
     std::string table_name() const override;
@@ -35,6 +37,7 @@ public:
     void save() override;
     void load() override;
     void print() const override;
+    std::string details() const override;
 
 private:
     std::string _account_number;

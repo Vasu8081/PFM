@@ -89,6 +89,10 @@ void transaction::load() {
 }
 
 void transaction::print() const {
+    std::cout << details() << std::endl;
+}
+
+std::string transaction::details() const {
     std::stringstream text;
     text << "Transaction ID: " << id() << std::endl;
     text << "Description: " << description() << std::endl;
@@ -100,5 +104,5 @@ void transaction::print() const {
     text << "Moved From Account: " << moved_from_account() << std::endl;
     text << "Date: " << date() << std::endl;
     text << "Proof Document: " << _proof_document.value_or("None") << std::endl;
-    std::cout << text.str() << std::endl;
+    return text.str();
 }

@@ -5,7 +5,40 @@ credit_card_account_form::credit_card_account_form(wxWindow *parent, std::shared
 {
     _account = std::dynamic_pointer_cast<credit_card_account>(account);
     _main_sizer = new wxBoxSizer(wxVERTICAL);
+    refresh();
+    SetSizer(_main_sizer);
+    Layout();
+}
 
+void credit_card_account_form::save() {
+    _account->account_type(enums::CREDIT_CARD_ACCOUNT);
+    _account->card_name(std::string(_card_name_ctrl->GetValue().mb_str()));
+    _account->card_number(std::string(_card_number_ctrl->GetValue().mb_str()));
+    _account->expiry_date(std::string(_expiry_date_ctrl->GetValue().mb_str()));
+    _account->cvv(std::stoi(std::string(_cvv_ctrl->GetValue().mb_str())));
+    _account->credit_limit(std::stod(std::string(_credit_limit_ctrl->GetValue().mb_str())));
+    _account->balance_due(std::stod(std::string(_balance_due_ctrl->GetValue().mb_str())));
+    _account->statement_day(std::stoi(std::string(_statement_day_ctrl->GetValue().mb_str())));
+    _account->billing_date(std::stoi(std::string(_billing_date_ctrl->GetValue().mb_str())));
+
+    _account->print();
+    if (_account->id().empty()) {
+        _account->save();
+        global_config.accounts[_account->id()] = _account;
+        wxMessageBox(_account->details(), "Saved successfully", wxOK | wxICON_INFORMATION);
+    }
+    else {
+        _account->save();
+    }
+}
+
+void credit_card_account_form::reset() {
+    _account = std::make_shared<credit_card_account>();
+    refresh();
+}
+
+void credit_card_account_form::refresh() {
+    _main_sizer->Clear(true);
     // Card Name
     auto* card_name_label = new wxStaticText(this, wxID_ANY, "Card Name:");
     _card_name_ctrl = new wxTextCtrl(this, wxID_ANY, _account->card_name());
@@ -53,28 +86,5 @@ credit_card_account_form::credit_card_account_form(wxWindow *parent, std::shared
     _billing_date_ctrl = new wxTextCtrl(this, wxID_ANY, std::to_string(_account->billing_date()));
     _main_sizer->Add(billing_date_label, 0, wxALL, 5);
     _main_sizer->Add(_billing_date_ctrl, 0, wxEXPAND | wxALL, 5);
-
-    SetSizer(_main_sizer);
     Layout();
-}
-
-void credit_card_account_form::save() {
-    _account->account_type(enums::CREDIT_CARD_ACCOUNT);
-    _account->card_name(std::string(_card_name_ctrl->GetValue().mb_str()));
-    _account->card_number(std::string(_card_number_ctrl->GetValue().mb_str()));
-    _account->expiry_date(std::string(_expiry_date_ctrl->GetValue().mb_str()));
-    _account->cvv(std::stoi(std::string(_cvv_ctrl->GetValue().mb_str())));
-    _account->credit_limit(std::stod(std::string(_credit_limit_ctrl->GetValue().mb_str())));
-    _account->balance_due(std::stod(std::string(_balance_due_ctrl->GetValue().mb_str())));
-    _account->statement_day(std::stoi(std::string(_statement_day_ctrl->GetValue().mb_str())));
-    _account->billing_date(std::stoi(std::string(_billing_date_ctrl->GetValue().mb_str())));
-
-    _account->print();
-    if (_account->id().empty()) {
-        _account->save();
-        global_config.accounts[_account->id()] = _account;
-    }
-    else {
-        _account->save();
-    }
 }

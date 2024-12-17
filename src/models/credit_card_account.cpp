@@ -130,6 +130,10 @@ void credit_card_account::load() {
 }
 
 void credit_card_account::print() const {
+    std::cout << details() << std::endl;
+}
+
+std::string credit_card_account::details() const {
     std::stringstream text;
     text << "account_type: " << account_t(account_type()) << std::endl;
     text << "account id: " << id() << std::endl;
@@ -141,5 +145,5 @@ void credit_card_account::print() const {
     text << "balance_due: " << balance_due() << std::endl;
     text << "statement_day: " << statement_day() << std::endl;
     text << "billing_date: " << billing_date() << std::endl;
-    std::cout << text.str() << std::endl;
+    return text.str();
 }

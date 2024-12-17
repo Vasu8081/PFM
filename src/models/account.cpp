@@ -75,4 +75,14 @@ void account::print() const {
     text << "ID: " << _id << std::endl;
     text << "User ID: " << _user_id << std::endl;
     text << "Account_type: " << account_t(account_type()) << std::endl;
+    std::cout << text.str();
 }
+
+std::string account::details() const {
+    std::stringstream text;
+    text << "ID: " << _id << std::endl;
+    text << "User ID: " << _user_id << std::endl;
+    text << "Account_type: " << account_t(account_type()) << std::endl;
+    return text.str();
+}
+

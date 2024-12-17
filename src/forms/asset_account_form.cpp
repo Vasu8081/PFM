@@ -5,6 +5,37 @@ asset_account_form::asset_account_form(wxWindow *parent, std::shared_ptr<account
 {
     _account = std::dynamic_pointer_cast<asset_account>(account);
     _main_sizer = new wxBoxSizer(wxVERTICAL);
+    refresh();
+    SetSizer(_main_sizer);
+    Layout();
+}
+
+void asset_account_form::save() {
+    _account->account_type(enums::ASSET_ACCOUNT);
+    _account->asset_name(std::string(_asset_name_ctrl->GetValue().mb_str()));
+    _account->asset_type(std::string(_asset_type_ctrl->GetValue().mb_str()));
+    _account->cost_of_ownership(std::stod(std::string(_cost_of_ownership_ctrl->GetValue().mb_str())));
+    _account->paid_amount(std::stod(std::string(_paid_amount_ctrl->GetValue().mb_str())));
+    _account->current_market_value(std::stod(std::string(_current_market_value_ctrl->GetValue().mb_str())));
+    _account->purchase_date(std::string(_purchase_date_ctrl->GetValue().mb_str()));
+    _account->print();
+    if (_account->id().empty()) {
+        _account->save();
+        global_config.accounts[_account->id()] = _account;
+        wxMessageBox(_account->details(), "Saved successfully", wxOK | wxICON_INFORMATION);
+    }
+    else {
+        _account->save();
+    }
+}
+
+void asset_account_form::reset() {
+    _account = std::make_shared<asset_account>();
+    refresh();
+}
+
+void asset_account_form::refresh() {
+    _main_sizer->Clear(true);
 
     // Asset Name
     auto *asset_name_label = new wxStaticText(this, wxID_ANY, "Asset Name:");
@@ -41,25 +72,5 @@ asset_account_form::asset_account_form(wxWindow *parent, std::shared_ptr<account
     _purchase_date_ctrl = new wxTextCtrl(this, wxID_ANY, _account->purchase_date());
     _main_sizer->Add(purchase_date_label, 0, wxALL, 5);
     _main_sizer->Add(_purchase_date_ctrl, 0, wxEXPAND | wxALL, 5);
-
-    SetSizer(_main_sizer);
     Layout();
-}
-
-void asset_account_form::save() {
-    _account->account_type(enums::ASSET_ACCOUNT);
-    _account->asset_name(std::string(_asset_name_ctrl->GetValue().mb_str()));
-    _account->asset_type(std::string(_asset_type_ctrl->GetValue().mb_str()));
-    _account->cost_of_ownership(std::stod(std::string(_cost_of_ownership_ctrl->GetValue().mb_str())));
-    _account->paid_amount(std::stod(std::string(_paid_amount_ctrl->GetValue().mb_str())));
-    _account->current_market_value(std::stod(std::string(_current_market_value_ctrl->GetValue().mb_str())));
-    _account->purchase_date(std::string(_purchase_date_ctrl->GetValue().mb_str()));
-    _account->print();
-    if (_account->id().empty()) {
-        _account->save();
-        global_config.accounts[_account->id()] = _account;
-    }
-    else {
-        _account->save();
-    }
 }

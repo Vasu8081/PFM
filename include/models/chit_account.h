@@ -28,6 +28,8 @@ public:
     void mature_amount(double mature_amount);
     void mature_date(std::optional<std::string> mature_date);
     void last_added_date(std::optional<std::string> last_added_date);
+    void income(double amount) override { _accumulated_balance += amount; };
+    void expense(double amount) override { _accumulated_balance -= amount; };
 
     // DB specific methods
     std::string table_name() const override;
@@ -36,6 +38,7 @@ public:
     void save() override;
     void load() override;
     void print() const override;
+    std::string details() const override;
 
 private:
     std::string _chit_name;
